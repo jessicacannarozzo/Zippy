@@ -1,3 +1,19 @@
-- grocery list
-- medical search thing
-- recipe suggestor
+- grocery list:
+	Google docs based grocery list that can be shared with another user via simple web server.
+	The other user will receive a code that connects is to the list.
+	Items marked or added are updated among both users.
+	The app display the score with how many items each one got.
+	Lists can be reused.
+	Additional features:
+	- Store cupom
+	- Automatically add ingredients to the list based on desired recipe selections
+	
+- medical journal:
+	Journal that helps user to investigate and analyse things related to common simptoms hard to track, such as headache, also giving more complete info to doctors.
+	Additional info is asked such as what was eaten that day and the previous, which medications were taken, anything happened out of normal routine, stress related events, etc.
+	App will gather info about temperature and air pressure that day/time automatically.
+	(Somehow) the app can generate graphs to help user analyze common occurences of a given symptom. 
+	
+- recipe suggestor:
+	Input the user for a few ingredients he has available and suggests a recipe. 
+	Performs online search, display recipe titles and redirects user to the page when title is clicked.
