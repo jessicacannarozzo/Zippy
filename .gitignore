@@ -1,0 +1,14 @@
+/*Recommended for Android Studio Development
+*Source: https://stackoverflow.com/a/17803964 */
+.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+
+//Generated files
+.class
