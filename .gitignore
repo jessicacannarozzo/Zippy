@@ -10,5 +10,8 @@
 /captures
 .externalNativeBuild
 
+//Work/Education profiles. Possibly unnecessary.
+.rawproto 
+
 //Generated files
 .class
