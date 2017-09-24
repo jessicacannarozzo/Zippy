@@ -1,0 +1,9 @@
+Week 1 Duties:
+
+- Helpig D1 report: 1.5h
+- Helping with presentation slides: 1h
+- Team Sync Meeting: 1.5h
+- D1 Presentation prep: 1h
+- Learning Firebase Database and FirebaseUI 2h
+    
+Total: 7h
