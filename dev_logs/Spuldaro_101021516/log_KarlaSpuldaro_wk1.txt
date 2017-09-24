@@ -1,0 +1,9 @@
+Week 1 Duties:
+
+- Helping write/Review D1 report: 1.5h
+- Helping creating D1 presentation slides: 1h
+- Team Sync Meeting: 1.5h
+- D1 Presentation prep: 1h
+- Updating git docs, working on app diagram flow & main components break down: 3h
+
+Total: 8h
