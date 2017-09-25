@@ -1,0 +1,16 @@
+Week 1:
+
+- Team meetings: 1.5h
+- Presentation prep/rehearsal: 1.5h
+- Preparing Android Studio: .5h
+- Initializing our project and going through default code: 1h
+- Writing Android Studio boilerplate wiki on our GitHub: .5h
+- D1 report (non-functional + functional features): 1h
+- Editing D1 report: .5h
+- Researching auto-documenting software: 1h
+- Firebase tutorial: 1h
+
+Total: 8.5h
+
+Week went smoothly. I feel that we were well-prepared for our first deliverable, and I look forward future ones. Everyone equally contributed to the first round of documentation. Group meetings are productive and I enjoy attending them.
+
