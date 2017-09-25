@@ -1,0 +1,7 @@
+Week 1 Duties:
+  - Worked on D1 writeup: 0.5h
+  - Team Sync Meeting: 1.5h
+  - Researching tools: 2h
+  - familiarizing myself with android studio: 1h
+  - D1 Presentation prep: 1h
+total: 6h
