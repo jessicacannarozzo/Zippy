@@ -1,1 +1,1 @@
-- Firebase tutorial: 1.5h
+- Firebase tutorial: 3h
