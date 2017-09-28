@@ -1,0 +1,21 @@
+To Do:
+
+- We need new zippy icon. It must be square.
+
+- Are we having local copies of the list? Will this work offline?
+
+- Curiosity: What kind of connection firebase implements? Constant polling? Open socket?
+
+- Testing tools? 
+
+- Will someone be responsible for testing all features or whoever implements a feature also writes tests for it?
+
+- Test how firebase deals with conflict scenarios: 
+	-What if P1 adds item and P2 deletes something at the same time?
+	-What if P1 deletes an existing list while P2 edited something there?
+
+- Notification sent to everyone sharing the same list upon every update?
+	No, too annoying. Only when a list is shared with another user (not basic functionality. We could first make app display the new list under the person added to it, then we deal with notification and redirection, if that looks better).
+
+- Are we implementing an 'unshare' option? If so, we need to add parameters so that db knows who owns the list.
+  Then can a second user sharing the list also share it with someone else, or just the owner? This topic can go under extra features.

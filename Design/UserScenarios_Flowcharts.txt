@@ -1,0 +1,63 @@
+APP NAVIGATION FLOW (Prototype Part 1: D2)
+Flowchart link for Scenarios 1 & 3: https://drive.google.com/file/d/0ByM32OwpDvJceEVncXJCb24wOU0/view?usp=sharing
+
+******************************************************************
+Sprint 1 - Prototype Part 1: Single user grocery list
+******************************************************************
+
+USER SCENARIO 1 : Brand new registers in, creates a list and check off items at the grocery store. List is reused over and over.
+
+P1 : user | P1 Actions:
+1- P1 downloads zippy
+2- launches app
+3- registers (app sends request to server to register new user w/ P1 first name, last name and email)
+4- creates new list (list name required. Ie. L1. App sends request to server to add new list L1 under P1)
+5- adds item to the list (app displays item to list with associated new event listeners. App sends request to server to add new item to the P1/L1 list, passing list id & item name)
+6- repeats add item x times
+7- renames list (App sends request to server to rename L1 list to P1List)
+8- P1 goes to grocery store a few hours later
+checks off items as he/she finds them (App sends request to server to change list item check state , passing list id & check select)
+9- on the next week, P1 selects the same list
+10- resets list (all check boxes change to clear state. App send request to server to clear all check boxes.)
+11- reuse same list of items 
+
+
+USER SCENARIO 2: User selects a saved list to review it.
+
+P1 : user | P1 Actions:
+2- launches app
+3- gets 'my lists'
+4- selects an existing list (sends request to server, passing list id. Displays list when received.)
+5 - goes shopping
+
+******************************************************************
+
+
+
+******************************************************************
+Sprint 2 - Prototype Part 2: Sharable grocery list
+******************************************************************
+
+USER SCENARIO 3: Sharing an existing grocery list with another user.
+P1 : user1, P2 : user2
+
+P1 Actions:
+1- launches app
+3- gets 'my lists'
+4- selects 'P1 Grocery List' (sends request to server, passing list id. Displays list when received.)
+5- shares list (app requests email of the person P1 wants to share his list with. Upon submission of P2's email, app sends server a request to update P2's account to add new list and point it to the existing one P1 also has access. Server sends the new list to P2's app. Ap notifies P2 (notification feature: TBD) )
+
+P2 Actions:
+1- recieves zippy push notification 'new shared list' (notification feature: TBD)
+2- goes to shared list (app sends request to get list. App displays it when received)
+3- renames list (App sends request to server to rename L2 list to 'Bros Groceries'. Name udpade sent ti P1.)
+
+P1 Actions:
+6- receives zippy push notification 'P2 joined your list 'P1 Grocery List' (notification feature: TBD)
+7- goes to shared list (redirects to zippy my lists view, notices lista name has changed)
+8- adds new item (app sends request to server, passing list id and new item. App displays new item. Server sends list update to P2)
+
+******************************************************************
+
+  
+

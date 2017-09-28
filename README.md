@@ -1,5 +1,10 @@
-# Test
+# README
 
+Zippy : A grocery list service
+Android mobile app
+
+
+Internal documents:
 D1 doc link: https://docs.google.com/document/d/1bW4gcxQQb82ad2ktN5dApeIZFKHaGK8ArrgKO7HQGP8/edit?usp=sharing
 
 Zippy diagram: https://drive.google.com/file/d/0ByM32OwpDvJcbzZXaFV5YzlJdWc/view
