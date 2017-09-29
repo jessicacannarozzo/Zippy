@@ -4,18 +4,32 @@ To Do:
 
 - Are we having local copies of the list? Will this work offline?
 
+	This is enabled with FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+	When the app goes back online the cache will be validated and updated.
+	https://firebase.google.com/docs/database/android/offline-capabilities
+
 - Curiosity: What kind of connection firebase implements? Constant polling? Open socket?
 
-- Testing tools? 
+	Firebase uses WebSocket, it will fall back to AJAX polling with REST if WebSocket
+	is not available, but Android has WebSockets.
+
+- Testing tools?
 
 - Will someone be responsible for testing all features or whoever implements a feature also writes tests for it?
 
-- Test how firebase deals with conflict scenarios: 
+- Test how firebase deals with conflict scenarios:
 	-What if P1 adds item and P2 deletes something at the same time?
+
+		FirebaseRecyclerAdapter ie. the List View, will receive a callback when the elements on the list change
+		Item that is added by P1 will show up on the list and the item P2 deletes will be removed in realtime.
+
 	-What if P1 deletes an existing list while P2 edited something there?
 
+		So if the user is adding a new item to the list and the list is deleted by the owner
+		the path of least resistance is have the user go back to the list of lists view.
+
 - Notification sent to everyone sharing the same list upon every update?
-	No, too annoying. Only when a list is shared with another user (not basic functionality. We could first make app display the new list under the person added to it, then we deal with notification and redirection, if that looks better).
+		No, too annoying. Only when a list is shared with another user (not basic functionality. We could first make app display the new list under the person added to it, then we deal with notification and redirection, if that looks better).
 
 - Are we implementing an 'unshare' option? If so, we need to add parameters so that db knows who owns the list.
-  Then can a second user sharing the list also share it with someone else, or just the owner? This topic can go under extra features.
+	  Then can a second user sharing the list also share it with someone else, or just the owner? This topic can go under extra features.
