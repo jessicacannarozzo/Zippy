@@ -1,2 +1,2 @@
-- Firebase tutorial: 3h
+- Firebase tutorial: 4h
 - Group meeting to discuss design specifics: 1.5h
