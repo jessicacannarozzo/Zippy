@@ -1,0 +1,9 @@
+Week 2 Duties:
+
+- Defined project sprints/ backlogs. Created/edited milestones and Sprint 1 issues on GitHub: 1h
+- Sketched / revised app views: 1.5h
+- Team Sync Meeting: 1.5h
+- Revised / completed D2 user scenarios and app flowcharts: 2h
+- Android Studio tutorial: 2h
+
+Total: 8h
