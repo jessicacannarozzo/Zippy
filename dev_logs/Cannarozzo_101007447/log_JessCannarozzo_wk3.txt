@@ -1,1 +1,2 @@
-- .45h on Android Studio
+- 1.5h on Android Studio tutorial
+- 2h on connecting our app to Firebase and configuring it
