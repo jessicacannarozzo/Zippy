@@ -1,0 +1,6 @@
+Week 2 Duties:
+
+- Team Sync Meeting: 1.5h
+- Learning Firebase Database and FirebaseUI 2h
+    
+Total: 3.5h
