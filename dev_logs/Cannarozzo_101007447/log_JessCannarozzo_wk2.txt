@@ -1,2 +1,7 @@
 - Firebase tutorial: 4h
 - Group meeting to discuss design specifics: 1.5h
+- Android Studio tutorial: 1h
+
+Total: 6.5h
+
+
