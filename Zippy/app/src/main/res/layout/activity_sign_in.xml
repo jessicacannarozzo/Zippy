@@ -49,10 +49,30 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_buttons"
+        android:id="@+id/layout_display_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_email_password"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/field_display_name"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:hint="@string/display_name_label"
+            android:gravity="center_horizontal"
+            android:inputType="textPersonName"
+            android:maxLines="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_display_name"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal">
 
@@ -62,14 +82,19 @@
             android:layout_height="wrap_content"
             android:text="@string/sign_in" />
 
-
         <Button
             android:id="@+id/button_sign_up"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/layout_buttons"
+            android:layout_alignRight="@+id/layout_buttons"
+            android:layout_centerVertical="true"
             android:text="@string/sign_up" />
 
+
     </LinearLayout>
+
+
 
 
 </RelativeLayout>
