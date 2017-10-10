@@ -1,0 +1,4 @@
+- Group meeting (design specifics): 1.5h
+- familiarizing myself with firebase
+- reading over docs 
+- getting env fully equipped
