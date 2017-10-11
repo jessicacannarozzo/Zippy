@@ -79,8 +79,14 @@ public abstract class ShoppingListFragment extends Fragment {
                 return new ListViewHolder(inflater.inflate(R.layout.item_list, viewGroup, false));
             }
 
+
+
             protected void onBindViewHolder(ListViewHolder viewHolder, int position, final ListItem model) {
                 final DatabaseReference listRef = getRef(position);
+
+                final String postKey = listRef.getKey();
+
+                viewHolder.bindToListItem(model);
 
             }
         };

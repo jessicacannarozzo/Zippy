@@ -15,4 +15,6 @@ public class MyShoppingListFragment extends ShoppingListFragment {
         return databaseReference.child("user-lists")
                 .child(getUid());
     }
+
+
 }

@@ -24,9 +24,8 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
         numSharesView = itemView.findViewById(R.id.list_num_of_users);
     }
 
-    public void bindToPost(ListItem listItem, View.OnClickListener starClickListener) {
+    public void bindToListItem(ListItem listItem) {
         nameView.setText(listItem.listName);
-        numSharesView.setText(String.valueOf(listItem.stars));
-        sharedView.setOnClickListener(starClickListener);
+        numSharesView.setText(String.valueOf(listItem.shares));
     }
 }
