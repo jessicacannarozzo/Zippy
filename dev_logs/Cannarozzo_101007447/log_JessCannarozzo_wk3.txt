@@ -2,5 +2,6 @@
 - 2h on connecting our app to Firebase and configuring it
 - 1.5h Group Meeting
 - 2h Firebase research
+- .5h made app icon
 
-Total: 7h
+Total: 7.5h

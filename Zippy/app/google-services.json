@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "727033337662",
-    "firebase_url": "https://database-54206.firebaseio.com",
-    "project_id": "database-54206",
-    "storage_bucket": "database-54206.appspot.com"
+    "project_number": "16689870464",
+    "firebase_url": "https://zippy-4512e.firebaseio.com",
+    "project_id": "zippy-4512e",
+    "storage_bucket": "zippy-4512e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:727033337662:android:fcfef757a832647b",
+        "mobilesdk_app_id": "1:16689870464:android:c330395f012e6540",
         "android_client_info": {
           "package_name": "divideandconquer.zippy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "727033337662-rfb96h4rh634mkppb3ppmbk4c1m86l7l.apps.googleusercontent.com",
+          "client_id": "16689870464-1afh31579kgup34mgtt3boa7bukpmolt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "divideandconquer.zippy",
+            "certificate_hash": "6f897ca5fa3bf76893f56b021c66341dd9e711c1"
+          }
+        },
+        {
+          "client_id": "16689870464-mh2u6n519vdiik0qc4h3skne85mph0ck.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBCn74mChnLrFHInG5dMG7lnPm4p7EVYtI"
+          "current_key": "AIzaSyDsXKCdOihiT8CKCutLkEXj9uLcVbuCAWY"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16689870464-mh2u6n519vdiik0qc4h3skne85mph0ck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
