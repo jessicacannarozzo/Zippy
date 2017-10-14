@@ -12,8 +12,7 @@ public class MyShoppingListFragment extends ShoppingListFragment {
 
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
-        return databaseReference.child("user-lists")
-                .child(getUid());
+        return databaseReference.child("user-lists").child(getUid());
     }
 
 

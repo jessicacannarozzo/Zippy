@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import divideandconquer.zippy.R;
+import divideandconquer.zippy.TodoDetailActivity;
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.viewholder.ListViewHolder;
 
@@ -67,6 +68,8 @@ public abstract class ShoppingListFragment extends Fragment {
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = getQuery(mDatabase);
 
+
+
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ListItem>()
                 .setQuery(postsQuery, ListItem.class)
                 .build();
@@ -85,6 +88,18 @@ public abstract class ShoppingListFragment extends Fragment {
                 final DatabaseReference listRef = getRef(position);
 
                 final String postKey = listRef.getKey();
+
+                // Set click listener for the whole list view
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Launch PostDetailActivity
+                        Intent intent = new Intent(getActivity(), TodoDetailActivity.class);
+                        intent.putExtra(TodoDetailActivity.EXTRA_POST_KEY, postKey);
+
+                        startActivity(intent);
+                    }
+                });
 
                 viewHolder.bindToListItem(model);
 

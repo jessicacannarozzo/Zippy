@@ -85,7 +85,8 @@ public class NewListActivity extends BaseActivity {
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             // Write new post
-                            writeNewPost(userId, user.username, listName);
+                            writeNewList(userId, user.username, listName);
+
                         }
 
                         // Finish this Activity, back to the stream
@@ -114,19 +115,34 @@ public class NewListActivity extends BaseActivity {
     }
 
     // [START write_fan_out]
-    private void writeNewPost(String userId, String username, String listName) {
+    private void writeNewList(String userId, String username, String listName) {
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         String key = mDatabase.child("todo-lists").push().getKey();
         ListItem listItem = new ListItem(userId, username, listName);
+        //Add user to access
+        listItem.access.put(userId, true);
+
         Map<String, Object> postValues = listItem.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/todo-lists/" + key, postValues);
         childUpdates.put("/user-lists/" + userId + "/" + key, postValues);
-
         mDatabase.updateChildren(childUpdates);
+
+        //Update the users access table with the new post id.
+        DatabaseReference postsRef = mDatabase.child("/users/" + userId + "/" + "access");
+        Map<String, Object> hopperUpdates = new HashMap<String, Object>();
+        hopperUpdates.put(key, true);
+        postsRef.updateChildren(hopperUpdates);
+
+
+
+
+
     }
+
+
 
 
 
