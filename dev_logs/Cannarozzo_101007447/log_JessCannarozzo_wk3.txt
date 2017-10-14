@@ -1,3 +1,6 @@
 - 1.5h on Android Studio tutorial
 - 2h on connecting our app to Firebase and configuring it
 - 1.5h Group Meeting
+- 2h Firebase research
+
+Total: 7h
