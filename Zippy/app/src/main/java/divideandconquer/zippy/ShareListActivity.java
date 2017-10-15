@@ -114,7 +114,7 @@ public class ShareListActivity extends BaseActivity {
                 if (p == null) {
                     return Transaction.success(mutableData);
                 }
-                p.access.put("7SrRbdVQMZX22T2wDpOTLslIClF2", true);
+//                p.access.put("7SrRbdVQMZX22T2wDpOTLslIClF2", true);
 
                 // Set value and report transaction success
                 mutableData.setValue(p);
