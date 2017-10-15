@@ -29,6 +29,7 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 
 import divideandconquer.zippy.fragment.MyShoppingListFragment;
+import divideandconquer.zippy.fragment.RecentShoppingListFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -45,10 +46,13 @@ public class MainActivity extends BaseActivity {
         // Create the adapter that will return a fragment for each section
         mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             private final Fragment[] mFragments = new Fragment[] {
-                    new MyShoppingListFragment()
+                    new MyShoppingListFragment(),
+                    new RecentShoppingListFragment()
             };
             private final String[] mFragmentNames = new String[] {
-                    getString(R.string.heading_my_lists)
+                    getString(R.string.heading_my_lists),
+                    "Recent"
+
             };
             @Override
             public Fragment getItem(int position) {

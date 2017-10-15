@@ -133,7 +133,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail(), user.getDisplayName());
-
         // Go to MainActivity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();
@@ -169,9 +168,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     // [START basic_write]
     private void writeNewUser(String userId, String name, String email, String displayName) {
         User user = new User(name, email, displayName);
-
         mDatabase.child("users").child(userId).setValue(user);
     }
+
     // [END basic_write]
 
     @Override

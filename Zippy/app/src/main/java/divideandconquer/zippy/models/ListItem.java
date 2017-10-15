@@ -13,7 +13,7 @@ public class ListItem {
     public String author;
     public String listName;
     public int usersCount = 0;
-    public Map<String, Boolean> shares = new HashMap<>();
+    public Map<String, Boolean> access = new HashMap<>();
 
     public ListItem() {
     }
@@ -31,7 +31,7 @@ public class ListItem {
         result.put("author", author);
         result.put("listName", listName);
         result.put("usersCount", usersCount);
-        result.put("shares", shares);
+        result.put("access", access);
 
         return result;
     }
