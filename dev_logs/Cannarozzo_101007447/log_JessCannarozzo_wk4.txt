@@ -1,2 +1,5 @@
 - 1.5h Group Meeting
 - 4h Firebase Tutorial + Going through Geoff's code
+- 1h researching Firebase and Android Studio
+
+Total: 6.5h
