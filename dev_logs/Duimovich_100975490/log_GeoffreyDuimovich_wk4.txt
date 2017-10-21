@@ -1,0 +1,6 @@
+Week 4 Duties:
+
+- Team Sync Meeting: 1.5h
+- Implemented login menu and got base firebase stuff setup - 2 hrs
+- Implemented the list of users lists and implemented adding a new list and adding items to a list - 3 hrs 
+Total: 6.5 hrs

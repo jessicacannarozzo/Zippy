@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "727033337662",
+    "firebase_url": "https://database-54206.firebaseio.com",
+    "project_id": "database-54206",
+    "storage_bucket": "database-54206.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727033337662:android:fcfef757a832647b",
+        "android_client_info": {
+          "package_name": "divideandconquer.zippy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727033337662-rfb96h4rh634mkppb3ppmbk4c1m86l7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCn74mChnLrFHInG5dMG7lnPm4p7EVYtI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
