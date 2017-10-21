@@ -209,7 +209,7 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
         }
 
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
