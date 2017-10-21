@@ -182,7 +182,7 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
                 });
     }
 
-    private static class TodoViewHolder extends RecyclerView.ViewHolder {
+    public static class TodoViewHolder extends RecyclerView.ViewHolder {
 
         public CheckBox checkboxView;
         public TextView itemNameView;
@@ -209,136 +209,7 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
         }
 
     }
-
-    private static class TodoAdapter extends RecyclerView.Adapter<TodoViewHolder> {
-
-        private Context mContext;
-        private DatabaseReference mDatabaseReference;
-        private ChildEventListener mChildEventListener;
-
-        private List<String> mTodoItemIds = new ArrayList<>();
-        private List<TodoItem> mTodoItems = new ArrayList<>();
-
-        public TodoAdapter(final Context context, DatabaseReference ref) {
-            mContext = context;
-            mDatabaseReference = ref;
-
-            ChildEventListener childEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                    TodoItem comment = dataSnapshot.getValue(TodoItem.class);
-                    mTodoItemIds.add(dataSnapshot.getKey());
-                    mTodoItems.add(comment);
-                    notifyItemInserted(mTodoItems.size() - 1);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-                    TodoItem newComment = dataSnapshot.getValue(TodoItem.class);
-                    String commentKey = dataSnapshot.getKey();
-
-                    int commentIndex = mTodoItemIds.indexOf(commentKey);
-                    if (commentIndex > -1) {
-                        mTodoItems.set(commentIndex, newComment);
-                        notifyItemChanged(commentIndex);
-                    } else {
-                        Log.w(TAG, "onChildChanged:unknown_child:" + commentKey);
-                    }
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                    String commentKey = dataSnapshot.getKey();
-
-                    int commentIndex = mTodoItemIds.indexOf(commentKey);
-                    if (commentIndex > -1) {
-                        mTodoItemIds.remove(commentIndex);
-                        mTodoItems.remove(commentIndex);
-                        notifyItemRemoved(commentIndex);
-                    } else {
-                        Log.w(TAG, "onChildRemoved:unknown_child:" + commentKey);
-                    }
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-                    TodoItem movedComment = dataSnapshot.getValue(TodoItem.class);
-                    String commentKey = dataSnapshot.getKey();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
-                }
-
-            };
-            ref.addChildEventListener(childEventListener);
-
-            mChildEventListener = childEventListener;
-        }
-
-        @Override
-        public TodoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            View view = inflater.inflate(R.layout.include_todo_name, parent, false);
-            return new TodoViewHolder(view);
-        }
-
-
-
-        @Override
-        public void onBindViewHolder(final TodoViewHolder viewHolder, int position) {
-
-            TodoItem todoItem = mTodoItems.get(position);
-            viewHolder.itemNameView.setText(todoItem.item);
-            viewHolder.checkboxView.setChecked(todoItem.checked);
-        }
-
-        private void onCheckedClicked(DatabaseReference postRef) {
-            postRef.runTransaction(new Transaction.Handler() {
-                @Override
-                public Transaction.Result doTransaction(MutableData mutableData) {
-                    TodoItem p = mutableData.getValue(TodoItem.class);
-                    if (p == null) {
-                        return Transaction.success(mutableData);
-                    }
-                    p.setChecked(!p.checked);
-
-
-                    // Set value and report transaction success
-                    mutableData.setValue(p);
-                    return Transaction.success(mutableData);
-                }
-
-                @Override
-                public void onComplete(DatabaseError databaseError, boolean b,
-                                       DataSnapshot dataSnapshot) {
-                    // Transaction completed
-                    Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-                }
-            });
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return mTodoItems.size();
-        }
-
-        public void cleanupListener() {
-            if (mChildEventListener != null) {
-                mDatabaseReference.removeEventListener(mChildEventListener);
-            }
-        }
-
-
-
-    }
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
