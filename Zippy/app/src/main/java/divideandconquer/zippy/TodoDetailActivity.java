@@ -192,9 +192,11 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
             itemNameView = itemView.findViewById(R.id.todo_item_name);
         }
 
-        public void bindToItem(TodoItem item, View.OnClickListener checkedClickedListener) {
+        public void bindToItem(TodoItem item) {
             checkboxView.setChecked(item.checked);
             itemNameView.setText(item.item);
+
+
         }
 
     }
@@ -317,8 +319,6 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
             TodoItem todoItem = mTodoItems.get(position);
             viewHolder.itemNameView.setText(todoItem.item);
             viewHolder.checkboxView.setChecked(todoItem.checked);
-
-
         }
 
         private void onCheckedClicked(DatabaseReference postRef) {
