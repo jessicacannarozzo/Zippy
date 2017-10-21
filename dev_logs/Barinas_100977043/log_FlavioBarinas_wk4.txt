@@ -1,0 +1,4 @@
+
+Week 1 Duties:
+- Group meeting (design specifics): 1.5h
+- testing the creation of a facade for the firebas: 5h
