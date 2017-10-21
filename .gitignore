@@ -10,6 +10,8 @@
 /captures
 .externalNativeBuild
 
+/Zippy/app/google.services.json
+
 //Work/Education profiles. Possibly unnecessary.
 .rawproto 
 
