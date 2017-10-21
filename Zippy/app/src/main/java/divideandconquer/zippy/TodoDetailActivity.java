@@ -95,6 +95,7 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ListItem post = dataSnapshot.getValue(ListItem.class);
+                TodoItem post2 = dataSnapshot.getValue(TodoItem.class);
                 //This is where the owner of the list is saved as well as the name of the list and other stuff like that
             }
 
