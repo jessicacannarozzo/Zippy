@@ -35,93 +35,40 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoDetailActivity.TodoVie
         mContext = context;
         mDatabaseReference = ref;
 
-        // Create child event listener
-        // [START child_event_listener_recycler]
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
-                // A new comment has been added, add it to the displayed list
-                TodoItem comment = dataSnapshot.getValue(TodoItem.class);
-
-                // [START_EXCLUDE]
-                // Update RecyclerView
+                TodoItem item = dataSnapshot.getValue(TodoItem.class);
                 mTodoItemIds.add(dataSnapshot.getKey());
-                mTodoItems.add(comment);
+                mTodoItems.add(item);
                 notifyItemInserted(mTodoItems.size() - 1);
-                // [END_EXCLUDE]
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so displayed the changed comment.
-                TodoItem newComment = dataSnapshot.getValue(TodoItem.class);
-                String commentKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int commentIndex = mTodoItemIds.indexOf(commentKey);
-                if (commentIndex > -1) {
-                    // Replace with the new data
-                    mTodoItems.set(commentIndex, newComment);
-
-                    // Update the RecyclerView
-                    notifyItemChanged(commentIndex);
-                } else {
-                    Log.w(TAG, "onChildChanged:unknown_child:" + commentKey);
-                }
-                // [END_EXCLUDE]
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so remove it.
-                String commentKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int commentIndex = mTodoItemIds.indexOf(commentKey);
-                if (commentIndex > -1) {
-                    // Remove data from the list
-                    mTodoItemIds.remove(commentIndex);
-                    mTodoItems.remove(commentIndex);
-
-                    // Update the RecyclerView
-                    notifyItemRemoved(commentIndex);
-                } else {
-                    Log.w(TAG, "onChildRemoved:unknown_child:" + commentKey);
-                }
-                // [END_EXCLUDE]
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
 
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                TodoItem movedComment = dataSnapshot.getValue(TodoItem.class);
-                String commentKey = dataSnapshot.getKey();
-
-                // ...
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException());
-
             }
 
         };
         ref.addChildEventListener(childEventListener);
-        // [END child_event_listener_recycler]
-
-        // Store reference to listener so it can be removed on app stop
         mChildEventListener = childEventListener;
     }
 
@@ -132,53 +79,20 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoDetailActivity.TodoVie
         return new TodoDetailActivity.TodoViewHolder(view);
     }
 
-
-
     @Override
     public void onBindViewHolder(final TodoDetailActivity.TodoViewHolder viewHolder, int position) {
-
         TodoItem todoItem = mTodoItems.get(position);
         viewHolder.itemNameView.setText(todoItem.item);
         viewHolder.checkboxView.setChecked(todoItem.checked);
     }
 
-//        private void onCheckedClicked(DatabaseReference postRef) {
-//            postRef.runTransaction(new Transaction.Handler() {
-//                @Override
-//                public Transaction.Result doTransaction(MutableData mutableData) {
-//                    TodoItem p = mutableData.getValue(TodoItem.class);
-//                    if (p == null) {
-//                        return Transaction.success(mutableData);
-//                    }
-//                    p.setChecked(!p.checked);
-//
-//
-//                    // Set value and report transaction success
-//                    mutableData.setValue(p);
-//                    return Transaction.success(mutableData);
-//                }
-//
-//                @Override
-//                public void onComplete(DatabaseError databaseError, boolean b,
-//                                       DataSnapshot dataSnapshot) {
-//                    // Transaction completed
-//                    Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-//                }
-//            });
-//        }
-
-
     @Override
-    public int getItemCount() {
-        return mTodoItems.size();
-    }
+    public int getItemCount() {return mTodoItems.size();}
 
     public void cleanupListener() {
         if (mChildEventListener != null) {
             mDatabaseReference.removeEventListener(mChildEventListener);
         }
     }
-
-
 
 }

@@ -133,10 +133,6 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
         mAdapter.cleanupListener();
     }
 
-
-
-
-
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -150,7 +146,6 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
             }
         }
     }
-
 
     private void postItem() {
         final String uid = getUid();
@@ -204,7 +199,6 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
         public void bindToItem(TodoItem item) {
             checkboxView.setChecked(item.checked);
             itemNameView.setText(item.item);
-
 
         }
 
