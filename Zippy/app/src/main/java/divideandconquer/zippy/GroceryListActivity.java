@@ -32,12 +32,9 @@ import divideandconquer.zippy.models.User;
 
 public class GroceryListActivity extends BaseActivity {
 
-
     private static final String TAG = "GroceryListActivity";
-
     public static final String EXTRA_POST_KEY = "post_key";
     private String mTodoKey;
-
 
     //Databae references
     private DatabaseReference mGroceryListReference;
@@ -49,7 +46,6 @@ public class GroceryListActivity extends BaseActivity {
     private EditText mGroceryItemField;
     private Button mNewGroceryItemButton;
     private RecyclerView mTodoRecycler;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +68,6 @@ public class GroceryListActivity extends BaseActivity {
         mNewGroceryItemButton = findViewById(R.id.button_add_new_todo_item);
         mTodoRecycler = findViewById(R.id.recycler_todo_list);
 
-
         mNewGroceryItemButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -85,8 +80,8 @@ public class GroceryListActivity extends BaseActivity {
                 }
             }
         });
-        mTodoRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+        mTodoRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -100,7 +95,7 @@ public class GroceryListActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ListItem post = dataSnapshot.getValue(ListItem.class);
                 GroceryItem post2 = dataSnapshot.getValue(GroceryItem.class);
-                //This is where the owner of the list is saved as well as the name of the list and other stuff like that
+
             }
 
             @Override
@@ -158,11 +153,8 @@ public class GroceryListActivity extends BaseActivity {
                         mGroceryItemField.setText(null);
 
                     }
-
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
     }
 
@@ -170,6 +162,7 @@ public class GroceryListActivity extends BaseActivity {
 
         public CheckBox checkboxView;
         public TextView itemNameView;
+        private GroceryItem groceryItem;
 
         public GroceryItemViewHolder(View itemView) {
             super(itemView);
@@ -177,19 +170,18 @@ public class GroceryListActivity extends BaseActivity {
             checkboxView = itemView.findViewById(R.id.todo_checkbox);
             itemNameView = itemView.findViewById(R.id.todo_item_name);
 
-            checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-            {
+            checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     Log.w("Hello", "Hello");
+                    groceryItem.checked = isChecked;
+                    Log.w("Hello", groceryItem.item + " " + String.valueOf(groceryItem.checked));
                 }
             });
         }
 
-        //public void bindToItem(GroceryItem item) {
-        //    checkboxView.setChecked(item.checked);
-        //    itemNameView.setText(item.item);
-        //}
-
+        public void setGroceryItem(GroceryItem item) {
+            groceryItem = item;
+        }
     }
 
     @Override
@@ -213,7 +205,4 @@ public class GroceryListActivity extends BaseActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
-
-
 }

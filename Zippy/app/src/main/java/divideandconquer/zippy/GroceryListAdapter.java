@@ -76,12 +76,14 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
     public GroceryListActivity.GroceryItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.grocery_item, parent, false);
+
         return new GroceryListActivity.GroceryItemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final GroceryListActivity.GroceryItemViewHolder viewHolder, int position) {
         GroceryItem groceryItem = mGroceryItems.get(position);
+        viewHolder.setGroceryItem(groceryItem);
         viewHolder.itemNameView.setText(groceryItem.item);
         viewHolder.checkboxView.setChecked(groceryItem.checked);
     }
