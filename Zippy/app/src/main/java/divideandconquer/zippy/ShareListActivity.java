@@ -61,7 +61,6 @@ public class ShareListActivity extends BaseActivity {
         });
     }
 
-
     private void submitSharedList() {
         final String listName = mListNameField.getText().toString();
 
@@ -75,11 +74,8 @@ public class ShareListActivity extends BaseActivity {
         setEditingEnabled(false);
         Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
 
-
         DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
         DatabaseReference userRef = mDatabase.child("users");
-
-
 
         userRef.runTransaction(new Transaction.Handler() {
             @Override
@@ -124,8 +120,6 @@ public class ShareListActivity extends BaseActivity {
                 finish();
             }
         });
-
-
     }
 
     private void setEditingEnabled(boolean enabled) {
@@ -136,14 +130,6 @@ public class ShareListActivity extends BaseActivity {
             mSubmitButton.setVisibility(View.GONE);
         }
     }
-
-
-
-
-
-
-
-
 
 
 }
