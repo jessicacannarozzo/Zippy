@@ -15,23 +15,23 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import divideandconquer.zippy.models.TodoItem;
+import divideandconquer.zippy.models.GroceryItem;
 
 /**
  * Created by navi on 21/10/17.
  */
 
-public class TodoAdapter extends RecyclerView.Adapter<TodoDetailActivity.TodoViewHolder> {
+public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity.GroceryItemViewHolder> {
 
-    private static final String TAG = "TodoDetailActivity";
+    private static final String TAG = "GroceryListAdapter";
     private Context mContext;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
 
-    private List<String> mTodoItemIds = new ArrayList<>();
-    private List<TodoItem> mTodoItems = new ArrayList<>();
+    private List<String> mGroceryItemIds = new ArrayList<>();
+    private List<GroceryItem> mGroceryItems = new ArrayList<>();
 
-    public TodoAdapter(final Context context, DatabaseReference ref) {
+    public GroceryListAdapter(final Context context, DatabaseReference ref) {
         mContext = context;
         mDatabaseReference = ref;
 
@@ -40,10 +40,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoDetailActivity.TodoVie
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
-                TodoItem item = dataSnapshot.getValue(TodoItem.class);
-                mTodoItemIds.add(dataSnapshot.getKey());
-                mTodoItems.add(item);
-                notifyItemInserted(mTodoItems.size() - 1);
+                GroceryItem item = dataSnapshot.getValue(GroceryItem.class);
+                mGroceryItemIds.add(dataSnapshot.getKey());
+                mGroceryItems.add(item);
+                notifyItemInserted(mGroceryItems.size() - 1);
             }
 
             @Override
@@ -73,21 +73,21 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoDetailActivity.TodoVie
     }
 
     @Override
-    public TodoDetailActivity.TodoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GroceryListActivity.GroceryItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.include_todo_name, parent, false);
-        return new TodoDetailActivity.TodoViewHolder(view);
+        View view = inflater.inflate(R.layout.grocery_item, parent, false);
+        return new GroceryListActivity.GroceryItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final TodoDetailActivity.TodoViewHolder viewHolder, int position) {
-        TodoItem todoItem = mTodoItems.get(position);
-        viewHolder.itemNameView.setText(todoItem.item);
-        viewHolder.checkboxView.setChecked(todoItem.checked);
+    public void onBindViewHolder(final GroceryListActivity.GroceryItemViewHolder viewHolder, int position) {
+        GroceryItem groceryItem = mGroceryItems.get(position);
+        viewHolder.itemNameView.setText(groceryItem.item);
+        viewHolder.checkboxView.setChecked(groceryItem.checked);
     }
 
     @Override
-    public int getItemCount() {return mTodoItems.size();}
+    public int getItemCount() {return mGroceryItems.size();}
 
     public void cleanupListener() {
         if (mChildEventListener != null) {

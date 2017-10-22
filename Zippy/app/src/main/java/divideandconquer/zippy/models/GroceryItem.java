@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class TodoItem {
+public class GroceryItem {
 
     public String uid;
     public String author;
@@ -17,10 +17,10 @@ public class TodoItem {
 
     public Date timechecked;
 
-    public TodoItem() {
+    public GroceryItem() {
     }
 
-    public TodoItem(String uid, String author, String item) {
+    public GroceryItem(String uid, String author, String item) {
         this.uid = uid;
         this.author = author;
         this.item = item;

@@ -14,14 +14,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import divideandconquer.zippy.models.ListItem;
-import divideandconquer.zippy.models.TodoItem;
 import divideandconquer.zippy.models.User;
 
 /**
@@ -38,7 +32,8 @@ public class ShareListActivity extends BaseActivity {
 
     private DatabaseReference mDatabase;
 
-    private EditText mlistNameField;
+    private EditText mListNameField;
+
     private FloatingActionButton mSubmitButton;
 
     @Override
@@ -55,7 +50,7 @@ public class ShareListActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
 
-        mlistNameField = findViewById(R.id.share_list_title);
+        mListNameField = findViewById(R.id.share_list_title);
         mSubmitButton = findViewById(R.id.fab_submit_share_list);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -68,11 +63,11 @@ public class ShareListActivity extends BaseActivity {
 
 
     private void submitSharedList() {
-        final String listName = mlistNameField.getText().toString();
+        final String listName = mListNameField.getText().toString();
 
         // listName is required
         if (TextUtils.isEmpty(listName)) {
-            mlistNameField.setError(REQUIRED);
+            mListNameField.setError(REQUIRED);
             return;
         }
 
@@ -135,7 +130,7 @@ public class ShareListActivity extends BaseActivity {
     }
 
     private void setEditingEnabled(boolean enabled) {
-        mlistNameField.setEnabled(enabled);
+        mListNameField.setEnabled(enabled);
         if (enabled) {
             mSubmitButton.setVisibility(View.VISIBLE);
         } else {

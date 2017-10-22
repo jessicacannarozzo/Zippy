@@ -23,7 +23,7 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".NewListActivity" />
         <activity android:name=".ShareListActivity" />
-        <activity android:name=".TodoDetailActivity" />
+        <activity android:name=".GroceryListActivity" />
         <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

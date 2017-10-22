@@ -1,6 +1,5 @@
 package divideandconquer.zippy.fragment;
 
-import android.app.LauncherActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import divideandconquer.zippy.GroceryListActivity;
 import divideandconquer.zippy.R;
-import divideandconquer.zippy.TodoDetailActivity;
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.viewholder.ListViewHolder;
 
@@ -94,8 +93,8 @@ public abstract class ShoppingListFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         // Launch PostDetailActivity
-                        Intent intent = new Intent(getActivity(), TodoDetailActivity.class);
-                        intent.putExtra(TodoDetailActivity.EXTRA_POST_KEY, postKey);
+                        Intent intent = new Intent(getActivity(), GroceryListActivity.class);
+                        intent.putExtra(GroceryListActivity.EXTRA_POST_KEY, postKey);
 
                         startActivity(intent);
                     }

@@ -1,16 +1,13 @@
 package divideandconquer.zippy;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -18,52 +15,46 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import divideandconquer.zippy.models.ListItem;
-import divideandconquer.zippy.models.TodoItem;
+import divideandconquer.zippy.models.GroceryItem;
 import divideandconquer.zippy.models.User;
 
 /**
  * Created by geoff on 2017-10-13.
  */
 
-public class TodoDetailActivity extends BaseActivity implements View.OnClickListener{
+public class GroceryListActivity extends BaseActivity {
 
 
-    private static final String TAG = "TodoDetailActivity";
+    private static final String TAG = "GroceryListActivity";
 
     public static final String EXTRA_POST_KEY = "post_key";
     private String mTodoKey;
 
 
     //Databae references
-    private DatabaseReference mTodoReference;
-    private DatabaseReference mTodoItemReference;
+    private DatabaseReference mGroceryListReference;
+    private DatabaseReference mGroceryItemReference;
     private ValueEventListener mTodoListener;
-    private TodoAdapter mAdapter;
+    private GroceryListAdapter mAdapter;
 
     //UI Fields
-    private EditText mItemField;
-    private Button mNewItemButton;
+    private EditText mGroceryItemField;
+    private Button mNewGroceryItemButton;
     private RecyclerView mTodoRecycler;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_todo_detail);
+        setContentView(R.layout.activity_grocery_list_detail);
 
         mTodoKey = getIntent().getStringExtra(EXTRA_POST_KEY);
         if (mTodoKey == null) {
@@ -71,17 +62,29 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
         }
 
         // Initialize Database
-        mTodoReference = FirebaseDatabase.getInstance().getReference()
+        mGroceryListReference = FirebaseDatabase.getInstance().getReference()
                 .child("/todo-lists/").child(mTodoKey);
-        mTodoItemReference = FirebaseDatabase.getInstance().getReference()
+        mGroceryItemReference = FirebaseDatabase.getInstance().getReference()
                 .child("todo-items").child(mTodoKey);
 
-        mItemField = findViewById(R.id.field_todo_item_text);
-        mNewItemButton = findViewById(R.id.button_add_new_todo_item);
-
+        // getting UI components
+        mGroceryItemField = findViewById(R.id.field_todo_item_text);
+        mNewGroceryItemButton = findViewById(R.id.button_add_new_todo_item);
         mTodoRecycler = findViewById(R.id.recycler_todo_list);
 
-        mNewItemButton.setOnClickListener(this);
+
+        mNewGroceryItemButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String commentText = mGroceryItemField.getText().toString();
+                if(commentText.isEmpty()) {
+                    Toast.makeText(GroceryListActivity.this, "Cannot Add empty item.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    postItem();
+                }
+            }
+        });
         mTodoRecycler.setLayoutManager(new LinearLayoutManager(this));
 
     }
@@ -96,7 +99,7 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ListItem post = dataSnapshot.getValue(ListItem.class);
-                TodoItem post2 = dataSnapshot.getValue(TodoItem.class);
+                GroceryItem post2 = dataSnapshot.getValue(GroceryItem.class);
                 //This is where the owner of the list is saved as well as the name of the list and other stuff like that
             }
 
@@ -104,19 +107,19 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
                 // [START_EXCLUDE]
-                Toast.makeText(TodoDetailActivity.this, "Failed to load TodoList.",
+                Toast.makeText(GroceryListActivity.this, "Failed to load TodoList.",
                         Toast.LENGTH_SHORT).show();
                 // [END_EXCLUDE]
             }
         };
-        mTodoReference.addValueEventListener(todoListener);
+        mGroceryListReference.addValueEventListener(todoListener);
         // [END post_value_event_listener]
 
         // Keep copy of todoAdapter listener so we can remove it when app stops
         mTodoListener = todoListener;
 
         // Listen for new todo list items
-        mAdapter = new TodoAdapter(this, mTodoItemReference);
+        mAdapter = new GroceryListAdapter(this, mGroceryItemReference);
         mTodoRecycler.setAdapter(mAdapter);
     }
 
@@ -126,25 +129,11 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
 
         // Remove post value event listener
         if (mTodoListener != null) {
-            mTodoReference.removeEventListener(mTodoListener);
+            mGroceryListReference.removeEventListener(mTodoListener);
         }
 
         // Clean up comments listener
         mAdapter.cleanupListener();
-    }
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.button_add_new_todo_item) {
-            String commentText = mItemField.getText().toString();
-            if(commentText.isEmpty()) {
-                Toast.makeText(TodoDetailActivity.this, "Cannot Add empty item.",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                postItem();
-            }
-        }
     }
 
     private void postItem() {
@@ -158,15 +147,15 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
                         String authorName = user.username;
 
                         // Create new Todo Item
-                        String commentText = mItemField.getText().toString();
+                        String commentText = mGroceryItemField.getText().toString();
 
-                        TodoItem comment = new TodoItem(uid, authorName, commentText);
+                        GroceryItem comment = new GroceryItem(uid, authorName, commentText);
 
                         // Push the comment, it will appear in the list
-                        mTodoItemReference.push().setValue(comment);
+                        mGroceryItemReference.push().setValue(comment);
 
                         // Clear the field
-                        mItemField.setText(null);
+                        mGroceryItemField.setText(null);
 
                     }
 
@@ -177,12 +166,12 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
                 });
     }
 
-    public static class TodoViewHolder extends RecyclerView.ViewHolder {
+    public static class GroceryItemViewHolder extends RecyclerView.ViewHolder {
 
         public CheckBox checkboxView;
         public TextView itemNameView;
 
-        public TodoViewHolder(View itemView) {
+        public GroceryItemViewHolder(View itemView) {
             super(itemView);
 
             checkboxView = itemView.findViewById(R.id.todo_checkbox);
@@ -196,11 +185,10 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
             });
         }
 
-        public void bindToItem(TodoItem item) {
-            checkboxView.setChecked(item.checked);
-            itemNameView.setText(item.item);
-
-        }
+        //public void bindToItem(GroceryItem item) {
+        //    checkboxView.setChecked(item.checked);
+        //    itemNameView.setText(item.item);
+        //}
 
     }
 
@@ -216,7 +204,7 @@ public class TodoDetailActivity extends BaseActivity implements View.OnClickList
         if (i == R.id.share_list) {
 
             Intent intent = new Intent(this, ShareListActivity.class);
-            intent.putExtra(TodoDetailActivity.EXTRA_POST_KEY, getIntent().getStringExtra(EXTRA_POST_KEY));
+            intent.putExtra(GroceryListActivity.EXTRA_POST_KEY, getIntent().getStringExtra(EXTRA_POST_KEY));
             startActivity(intent);
 
             finish();

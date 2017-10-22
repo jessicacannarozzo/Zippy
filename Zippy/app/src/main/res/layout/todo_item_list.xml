@@ -12,7 +12,7 @@
 
         <include
             android:id="@+id/todolist_name_layout"
-            layout="@layout/include_todo_name"
+            layout="@layout/grocery_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true" />
