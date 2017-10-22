@@ -82,6 +82,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
 
     @Override
     public void onBindViewHolder(final GroceryListActivity.GroceryItemViewHolder viewHolder, int position) {
+        //position of grocery item in array
         GroceryItem groceryItem = mGroceryItems.get(position);
         String mGroceryItemId = mGroceryItemIds.get(position);
         viewHolder.setGroceryItem(groceryItem);

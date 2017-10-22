@@ -172,15 +172,17 @@ public class GroceryListActivity extends BaseActivity {
             checkboxView = itemView.findViewById(R.id.todo_checkbox);
             itemNameView = itemView.findViewById(R.id.todo_item_name);
 
+            //on checkbox checked:
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     groceryItem.checked = isChecked;
-                    Log.w("Item: ", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
-                    mDatabaseReference.child(groceryItemId).setValue(groceryItem);
+//                    Log.w("Item: ", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
+                    mDatabaseReference.child(groceryItemId).setValue(groceryItem); //only updating checked
                 }
             });
         }
 
+        //refer to GroceryListAdapter.java > onBindViewHolder to see where we receive item
         public void setGroceryItem(GroceryItem item) {groceryItem = item;}
         public void setGroceryItemId(String item) {groceryItemId = item;}
         public void setGroceryItemReference(DatabaseReference ref) {mDatabaseReference = ref;}
