@@ -94,7 +94,10 @@ public class GroceryListActivity extends BaseActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ListItem post = dataSnapshot.getValue(ListItem.class);
-                GroceryItem post2 = dataSnapshot.getValue(GroceryItem.class);
+
+                //set list title:
+                TextView title = (TextView) findViewById(R.id.list_name);
+                title.setText(post.listName);
 
             }
 
@@ -177,7 +180,7 @@ public class GroceryListActivity extends BaseActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     groceryItem.checked = isChecked;
 //                    Log.w("Item: ", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
-                    mDatabaseReference.child(groceryItemId).setValue(groceryItem); //only updating checked
+                    mDatabaseReference.child(groceryItemId).setValue(groceryItem);
                 }
             });
         }
