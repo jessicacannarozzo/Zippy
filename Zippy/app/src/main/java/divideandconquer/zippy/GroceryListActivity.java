@@ -52,6 +52,10 @@ public class GroceryListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_list_detail);
 
+        //set list title:
+        TextView title = (TextView) findViewById(R.id.list_name);
+        title.setText(NewListActivity.listName);
+
         mTodoKey = getIntent().getStringExtra(EXTRA_POST_KEY);
         if (mTodoKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
@@ -177,7 +181,7 @@ public class GroceryListActivity extends BaseActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     groceryItem.checked = isChecked;
 //                    Log.w("Item: ", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
-                    mDatabaseReference.child(groceryItemId).setValue(groceryItem); //only updating checked
+                    mDatabaseReference.child(groceryItemId).setValue(groceryItem);
                 }
             });
         }

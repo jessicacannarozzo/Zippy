@@ -77,6 +77,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.grocery_item, parent, false);
 
+
         return new GroceryListActivity.GroceryItemViewHolder(view);
     }
 
