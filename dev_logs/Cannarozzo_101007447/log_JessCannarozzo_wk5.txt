@@ -1,3 +1,5 @@
 - 1.75h on bug fixes
 - 1.5h Group Meeting
-- Working since 1:30...
+- 6.5h developing Zippy 
+	- Flavio and I set up the listener for CheckBox OnChange()
+	- added title for individual Zippy lists
