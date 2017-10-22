@@ -177,24 +177,14 @@ public class GroceryListActivity extends BaseActivity {
                     Log.w("Hello", "Hello");
                     groceryItem.checked = isChecked;
                     Log.w("Hello", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
-
                     mDatabaseReference.child(groceryItemId).setValue(groceryItem);
-
                 }
             });
         }
 
-        public void setGroceryItem(GroceryItem item) {
-            groceryItem = item;
-        }
-
-        public void setGroceryItemId(String item) {
-            groceryItemId = item;
-        }
-
-        public void setGroceryItemReference(DatabaseReference ref) {
-            mDatabaseReference = ref;
-        }
+        public void setGroceryItem(GroceryItem item) {groceryItem = item;}
+        public void setGroceryItemId(String item) {groceryItemId = item;}
+        public void setGroceryItemReference(DatabaseReference ref) {mDatabaseReference = ref;}
     }
 
     @Override
