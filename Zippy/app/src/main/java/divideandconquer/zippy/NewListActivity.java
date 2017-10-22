@@ -28,7 +28,7 @@ public class NewListActivity extends BaseActivity {
 
     private static final String TAG = "NewListActivity";
     private static final String REQUIRED = "Required";
-    public static String listName = "";
+
     private DatabaseReference mDatabase;
 
     private EditText mlistNameField;
@@ -55,7 +55,7 @@ public class NewListActivity extends BaseActivity {
     }
 
     private void submitPost() {
-        listName = mlistNameField.getText().toString();
+        final String listName = mlistNameField.getText().toString();
 
         // listName is required
         if (TextUtils.isEmpty(listName)) {

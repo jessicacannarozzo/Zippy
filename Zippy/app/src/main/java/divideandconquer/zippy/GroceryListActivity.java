@@ -52,10 +52,6 @@ public class GroceryListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_list_detail);
 
-        //set list title:
-        TextView title = (TextView) findViewById(R.id.list_name);
-        title.setText(NewListActivity.listName);
-
         mTodoKey = getIntent().getStringExtra(EXTRA_POST_KEY);
         if (mTodoKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
@@ -98,7 +94,10 @@ public class GroceryListActivity extends BaseActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ListItem post = dataSnapshot.getValue(ListItem.class);
-                GroceryItem post2 = dataSnapshot.getValue(GroceryItem.class);
+
+                //set list title:
+                TextView title = (TextView) findViewById(R.id.list_name);
+                title.setText(post.listName);
 
             }
 
