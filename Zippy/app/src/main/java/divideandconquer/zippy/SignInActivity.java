@@ -44,7 +44,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         // Views
         mEmailField = findViewById(R.id.field_email);
         mPasswordField = findViewById(R.id.field_password);
-        mDisplayName = findViewById(R.id.field_display_name);
+        //mDisplayName = findViewById(R.id.field_display_name);
 
         mSignInButton = findViewById(R.id.button_sign_in);
         mSignUpButton = findViewById(R.id.button_sign_up);
@@ -100,7 +100,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         showProgressDialog();
         String email = mEmailField.getText().toString();
         String password = mPasswordField.getText().toString();
-        final String displayName = mDisplayName.getText().toString();
+        //final String displayName = mDisplayName.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -113,7 +113,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         if (task.isSuccessful()) {
 
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(displayName)
+                                    .setDisplayName("BoB")
                                     .build();
 
                             task.getResult().getUser().updateProfile(profileUpdates);

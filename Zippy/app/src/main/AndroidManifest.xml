@@ -24,7 +24,9 @@
         <activity android:name=".NewListActivity" />
         <activity android:name=".ShareListActivity" />
         <activity android:name=".GroceryListActivity" />
-        <activity android:name=".SignInActivity">
+        <activity
+            android:name=".SignInActivity"
+            android:theme="@style/AppTheme2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
