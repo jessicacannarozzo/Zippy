@@ -86,6 +86,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         String mGroceryItemId = mGroceryItemIds.get(position);
         viewHolder.setGroceryItem(groceryItem);
         viewHolder.setGroceryItemId(mGroceryItemId);
+        viewHolder.setGroceryItemReference(mDatabaseReference);
         viewHolder.itemNameView.setText(groceryItem.item);
         viewHolder.checkboxView.setChecked(groceryItem.checked);
     }

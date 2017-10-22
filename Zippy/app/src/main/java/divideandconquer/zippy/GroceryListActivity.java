@@ -164,6 +164,7 @@ public class GroceryListActivity extends BaseActivity {
         public TextView itemNameView;
         private GroceryItem groceryItem;
         private String groceryItemId;
+        private DatabaseReference mDatabaseReference;
 
         public GroceryItemViewHolder(View itemView) {
             super(itemView);
@@ -175,7 +176,10 @@ public class GroceryListActivity extends BaseActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     Log.w("Hello", "Hello");
                     groceryItem.checked = isChecked;
-                    Log.w("Hello", groceryItem.item + " " + String.valueOf(groceryItem.checked));
+                    Log.w("Hello", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
+
+                    mDatabaseReference.child(groceryItemId).setValue(groceryItem);
+
                 }
             });
         }
@@ -186,6 +190,10 @@ public class GroceryListActivity extends BaseActivity {
 
         public void setGroceryItemId(String item) {
             groceryItemId = item;
+        }
+
+        public void setGroceryItemReference(DatabaseReference ref) {
+            mDatabaseReference = ref;
         }
     }
 
