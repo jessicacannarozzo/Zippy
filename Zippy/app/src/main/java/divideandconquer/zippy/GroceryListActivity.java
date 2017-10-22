@@ -163,6 +163,7 @@ public class GroceryListActivity extends BaseActivity {
         public CheckBox checkboxView;
         public TextView itemNameView;
         private GroceryItem groceryItem;
+        private String groceryItemId;
 
         public GroceryItemViewHolder(View itemView) {
             super(itemView);
@@ -181,6 +182,10 @@ public class GroceryListActivity extends BaseActivity {
 
         public void setGroceryItem(GroceryItem item) {
             groceryItem = item;
+        }
+
+        public void setGroceryItemId(String item) {
+            groceryItemId = item;
         }
     }
 
@@ -201,6 +206,7 @@ public class GroceryListActivity extends BaseActivity {
 
             finish();
             return true;
+
         } else {
             return super.onOptionsItemSelected(item);
         }
