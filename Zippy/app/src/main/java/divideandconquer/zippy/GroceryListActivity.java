@@ -174,9 +174,8 @@ public class GroceryListActivity extends BaseActivity {
 
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Log.w("Hello", "Hello");
                     groceryItem.checked = isChecked;
-                    Log.w("Hello", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
+                    Log.w("Item: ", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
                     mDatabaseReference.child(groceryItemId).setValue(groceryItem);
                 }
             });
