@@ -10,9 +10,19 @@
     tools:context="divideandconquer.zippy.GroceryListActivity">
 
 
+    <TextView
+        android:id="@+id/list_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
-
-<android.support.v7.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_todo_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -46,9 +56,6 @@
             android:text="+"/>
 
     </LinearLayout>
-
-
-
 
 
 </RelativeLayout>

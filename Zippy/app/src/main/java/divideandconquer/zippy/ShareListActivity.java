@@ -126,7 +126,6 @@ public class ShareListActivity extends BaseActivity {
         });
 
 
-
     }
 
     private void setEditingEnabled(boolean enabled) {
