@@ -183,6 +183,11 @@ public class GroceryListActivity extends BaseActivity {
                     mDatabaseReference.child(groceryItemId).setValue(groceryItem);
                 }
             });
+
+
+            //on item edited:
+//            itemNameView.setOnEditorActionListener(new ) {
+//            });
         }
 
         //refer to GroceryListAdapter.java > onBindViewHolder to see where we receive item
