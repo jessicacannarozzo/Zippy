@@ -1,0 +1,10 @@
+Week 5 Duties:
+
+- Reviewed GitHub issues & updates status. Created email account for testing: 0.25h
+- Team Sync Meeting: 1.5h
+- Firebase Tutorial: 1.25h
+- Reviewing project code updates: 1h
+- Started working on edit item feature + research: 2h
+  (works on UI only, need to set up listeners and sync to database)
+
+Total: 6h
