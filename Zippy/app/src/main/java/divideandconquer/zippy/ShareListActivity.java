@@ -77,14 +77,18 @@ public class ShareListActivity extends BaseActivity {
         DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
         DatabaseReference userRef = mDatabase.child("users");
 
+        //add access to users
         userRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
                 User p = mutableData.getValue(User.class);
-                if (p == null) {
+                if (p == null) { //no need to update
                     return Transaction.success(mutableData);
                 }
+
+                //add list to new user's accessible lists
                 p.access.put(mTodoKey, true);
+                
                 // Set value and report transaction success
                 mutableData.setValue(p);
                 return Transaction.success(mutableData);
@@ -98,6 +102,7 @@ public class ShareListActivity extends BaseActivity {
             }
         });
 
+        //add access to list
         todoListRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
@@ -106,6 +111,9 @@ public class ShareListActivity extends BaseActivity {
                     return Transaction.success(mutableData);
                 }
 //                p.access.put("7SrRbdVQMZX22T2wDpOTLslIClF2", true);
+
+                //grant access to new user from the list
+//                p.access.put(listName, true);
 
                 // Set value and report transaction success
                 mutableData.setValue(p);
