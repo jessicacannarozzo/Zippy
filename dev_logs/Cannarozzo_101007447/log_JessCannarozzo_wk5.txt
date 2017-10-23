@@ -1,5 +1,8 @@
-- 1.75h on bug fixes
+- 1.75h Bug fixes
 - 1.5h Group Meeting
-- 6.5h developing Zippy 
-	- Flavio and I set up the listener for CheckBox OnChange()
-	- added title for individual Zippy lists
+- 7h Developing Zippy 
+	- 6h: Flavio and I set up the listener for CheckBox OnChange()
+	- .5h: Added title for individual Zippy lists
+	- .5h: Started developing ShareListActivity
+
+Total: 10.25h
