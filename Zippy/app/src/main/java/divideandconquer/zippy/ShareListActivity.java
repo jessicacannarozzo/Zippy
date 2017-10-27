@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 
 import divideandconquer.zippy.models.ListItem;
@@ -77,61 +78,38 @@ public class ShareListActivity extends BaseActivity {
         DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
         DatabaseReference userRef = mDatabase.child("users");
 
+        //reference: https://firebase.google.com/docs/database/android/lists-of-data
+
+        //check if person is in our DB
+        if (isTargetValid(targetPerson)) {
+            int targetUID = getTargetUID(targetPerson); //get target's UID
+
+            //add to access array in DB
+            //list -> access.push(targetUID)
+            //targetUID->access.push(list ID)
+            
+
+        } else { //they're not in our DB
+            Toast.makeText(this, "Person not found.", Toast.LENGTH_SHORT);
+        }
+
+    }
 
 
-//        //add access to users
-//        userRef.runTransaction(new Transaction.Handler() {
-//            @Override
-//            public Transaction.Result doTransaction(MutableData mutableData) {
-//                User p = mutableData.getValue(User.class);
-//                if (p == null) { //no need to update
-//                    return Transaction.success(mutableData);
-//                }
-//
-//                //add list to new user's accessible lists
-//
-////                p.access.put(mTodoKey, true);
-//
-//
-//                // Set value and report transaction success
-//                mutableData.setValue(p);
-//                return Transaction.success(mutableData);
-//            }
-//
-//            @Override
-//            public void onComplete(DatabaseError databaseError, boolean b,
-//                                   DataSnapshot dataSnapshot) {
-//                // Transaction completed
-//                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-//            }
-//        });
-//
-//        //add access to list
-//        todoListRef.runTransaction(new Transaction.Handler() {
-//            @Override
-//            public Transaction.Result doTransaction(MutableData mutableData) {
-//                ListItem list = mutableData.getValue(ListItem.class);
-//                if (list == null) {
-//                    return Transaction.success(mutableData);
-//                }
-//
-//                //grant access to new user from the list
-////              list.access.put(listName, true);
-//                list.access.put(getUid(), true);
-//
-//                // Set value and report transaction success
-//                mutableData.setValue(p);
-//                return Transaction.success(mutableData);
-//            }
-//
-//            @Override
-//            public void onComplete(DatabaseError databaseError, boolean b,
-//                                   DataSnapshot dataSnapshot) {
-//                // Transaction completed
-//                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-//                finish();
-//            }
-//        });
+    //check if target email is valid (if it's in the DB)
+    boolean isTargetValid(String email) {
+        DatabaseReference ref = mDatabase.child("users");
+
+
+
+        return false; //will change
+    }
+
+
+    //get shared target's UID via email entered
+    //return: target UID
+    int getTargetUID(String email) {
+        return 0;
     }
 
     private void setEditingEnabled(boolean enabled) {
