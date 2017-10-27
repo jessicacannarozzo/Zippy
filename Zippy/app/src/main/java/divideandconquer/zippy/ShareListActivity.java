@@ -33,7 +33,7 @@ public class ShareListActivity extends BaseActivity {
 
     private DatabaseReference mDatabase;
 
-    private EditText mListNameField;
+    private EditText targetField;
 
     private FloatingActionButton mSubmitButton;
 
@@ -62,26 +62,20 @@ public class ShareListActivity extends BaseActivity {
     }
 
     private void submitSharedList() {
-        String targetPerson = findViewById(R.id.targetEmail).toString(); //get target person's email
-        final String listName = mListNameField.getText().toString(); //get
-
-        // listName is required
-        if (TextUtils.isEmpty(listName)) {
-            mListNameField.setError(REQUIRED);
-            return;
-        }
+        targetField = (EditText) findViewById(R.id.targetEmail); //get email field
+//        String targetPerson = findViewById(R.id.targetEmail).toString(); //get target person's email
+        String targetPerson = targetField.toString(); //get target person's email
 
         // Disable button so there are no multi-posts
-        setEditingEnabled(false);
-        Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
+//        setEditingEnabled(false);
+
 
         DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
         DatabaseReference userRef = mDatabase.child("users");
 
-        //reference: https://firebase.google.com/docs/database/android/lists-of-data
-
         //check if person is in our DB
-        if (isTargetValid(targetPerson)) {
+        if (isTargetValid(targetField)) {
+            Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
             int targetUID = getTargetUID(targetPerson); //get target's UID
 
             //add to access array in DB
@@ -97,9 +91,16 @@ public class ShareListActivity extends BaseActivity {
 
 
     //check if target email is valid (if it's in the DB)
-    boolean isTargetValid(String email) {
+    boolean isTargetValid(EditText targetField) {
         DatabaseReference ref = mDatabase.child("users");
 
+        //check if field is empty
+        if (targetField.getText().toString().trim().length() == 0) {
+            targetField.setError("Error.");
+            return false;
+        }
+
+        //check if target is in the DB
 
 
         return false; //will change
@@ -111,9 +112,10 @@ public class ShareListActivity extends BaseActivity {
     int getTargetUID(String email) {
         return 0;
     }
+    
 
     private void setEditingEnabled(boolean enabled) {
-        mListNameField.setEnabled(enabled);
+        targetField.setEnabled(enabled);
         if (enabled) {
             mSubmitButton.setVisibility(View.VISIBLE);
         } else {
