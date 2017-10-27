@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.User;
@@ -67,7 +68,7 @@ public class ShareListActivity extends BaseActivity {
         String targetPerson = targetField.toString(); //get target person's email
 
         // Disable button so there are no multi-posts
-//        setEditingEnabled(false);
+        setEditingEnabled(false);
 
 
         DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
@@ -98,18 +99,32 @@ public class ShareListActivity extends BaseActivity {
         if (targetField.getText().toString().trim().length() == 0) {
             targetField.setError("Error.");
             return false;
+        } else { //check if target is in the DB
+            ref.orderByChild("email").equalTo(targetField.getText().toString())
         }
-
-        //check if target is in the DB
-
-
-        return false; //will change
     }
 
 
     //get shared target's UID via email entered
     //return: target UID
+    //reference: https://stackoverflow.com/questions/39135619/java-firebase-search-by-child-value
     int getTargetUID(String email) {
+        DatabaseReference ref = mDatabase.child("users");
+        Query userQuery = ref.orderByKey().equalTo(email);
+
+        userQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    return dataSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "Something went wrong...", databaseError.toException());
+            }
+        });
         return 0;
     }
     
