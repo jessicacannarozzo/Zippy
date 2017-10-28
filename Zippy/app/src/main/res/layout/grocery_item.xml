@@ -19,12 +19,13 @@
         android:layout_weight="1"
         android:checked="false" />
 
-    <EditText
+    <TextView
         android:id="@+id/todo_item_name"
         style="@style/Base.TextAppearance.AppCompat.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:clickable="true"
         tools:text="Soap" />
 
 </LinearLayout>

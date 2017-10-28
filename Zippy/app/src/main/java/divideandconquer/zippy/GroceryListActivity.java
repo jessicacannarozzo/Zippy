@@ -36,14 +36,14 @@ public class GroceryListActivity extends BaseActivity {
     public static final String EXTRA_POST_KEY = "post_key";
     private String mTodoKey;
 
-    //Databae references
+    //Database reference
     private DatabaseReference mGroceryListReference;
     private DatabaseReference mGroceryItemReference;
     private ValueEventListener mTodoListener;
     private GroceryListAdapter mAdapter;
 
     //UI Fields
-    private EditText mGroceryItemField;
+    private TextView mGroceryItemField;
     private Button mNewGroceryItemButton;
     private RecyclerView mTodoRecycler;
 
@@ -179,15 +179,21 @@ public class GroceryListActivity extends BaseActivity {
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     groceryItem.checked = isChecked;
-//                    Log.w("Item: ", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
+                    Log.d("CHECKBOX","Item: "+ groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
                     mDatabaseReference.child(groceryItemId).setValue(groceryItem);
                 }
             });
 
 
-            //on item edited:
-//            itemNameView.setOnEditorActionListener(new ) {
-//            });
+            //on item clicked:
+            itemNameView.setOnClickListener(new android.view.View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    Log.d("TEXTBOX-CLICK","Item text: "+ itemNameView.getText() + "!!!");
+
+                }
+            });
         }
 
         //refer to GroceryListAdapter.java > onBindViewHolder to see where we receive item
