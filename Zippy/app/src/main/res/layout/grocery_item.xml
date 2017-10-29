@@ -28,4 +28,15 @@
         android:clickable="true"
         tools:text="Soap" />
 
+    <EditText
+        android:id="@+id/todo_edit_item_name"
+        style="@style/Base.TextAppearance.AppCompat.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:clickable="true"
+        android:inputType="text"
+        android:maxLines="1"
+        android:visibility="gone" />
+
 </LinearLayout>
