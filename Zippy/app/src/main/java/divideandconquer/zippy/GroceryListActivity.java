@@ -9,11 +9,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -174,7 +176,9 @@ public class GroceryListActivity extends BaseActivity {
         private Button mRemoveGroceryItemButton;
         private DatabaseReference mDatabaseReference;
 
-        public GroceryItemViewHolder(View itemView) {
+
+        // Refactor: simplifying reference to adapter, useful when removing an item
+        public GroceryItemViewHolder(View itemView, final GroceryListAdapter groceryListAdapter) {
             super(itemView);
 
             checkboxView = itemView.findViewById(R.id.todo_checkbox);
@@ -192,7 +196,6 @@ public class GroceryListActivity extends BaseActivity {
                     mDatabaseReference.child(groceryItemId).setValue(groceryItem);
                 }
             });
-
 
             //on item clicked for edition:
             itemNameView.setOnClickListener(new android.view.View.OnClickListener(){
@@ -243,7 +246,7 @@ public class GroceryListActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
 //                    Log.d("REMOVE-ITEM","Item to be removed: "+ itemNameView.getText());
-                    removeGroceryItem();
+                    removeGroceryItem(groceryItem, groceryItemId, groceryListAdapter);
                 }
             });
         }
@@ -293,8 +296,12 @@ public class GroceryListActivity extends BaseActivity {
 
         public void setGroceryItemReference(DatabaseReference ref) {mDatabaseReference = ref;}
 
-        private void removeGroceryItem() {
-            mDatabaseReference.child(groceryItemId).removeValue();
+        private void removeGroceryItem(GroceryItem groceryItem, String groceryItemId, GroceryListAdapter groceryListAdapter) {
+            // remove item from database
+            mDatabaseReference.child(this.groceryItemId).removeValue();
+
+            // remove item from our app
+            groceryListAdapter.removeGroceryItem(groceryItem, groceryItemId);
         }
     }
 
