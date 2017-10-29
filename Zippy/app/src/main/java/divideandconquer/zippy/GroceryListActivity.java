@@ -171,6 +171,7 @@ public class GroceryListActivity extends BaseActivity {
         private EditText editItemNameView;
         private GroceryItem groceryItem;
         private String groceryItemId;
+        private Button mRemoveGroceryItemButton;
         private DatabaseReference mDatabaseReference;
 
         public GroceryItemViewHolder(View itemView) {
@@ -181,6 +182,7 @@ public class GroceryListActivity extends BaseActivity {
             // itemNameView and editItemNameView are different states of the same item text instance, necessary for switching between view/edit
             itemNameView = itemView.findViewById(R.id.todo_item_name);
             editItemNameView = itemView.findViewById(R.id.todo_edit_item_name);
+            mRemoveGroceryItemButton = itemView.findViewById(R.id.button_todo_rem_item);
 
             //on checkbox checked:
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -236,8 +238,15 @@ public class GroceryListActivity extends BaseActivity {
                         }
                     }
             );
-        }
 
+            mRemoveGroceryItemButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+//                    Log.d("REMOVE-ITEM","Item to be removed: "+ itemNameView.getText());
+                    removeGroceryItem();
+                }
+            });
+        }
 
         private void userUpdatedItem() {
             // when updating an item text, we switch back the visibilities
@@ -283,6 +292,10 @@ public class GroceryListActivity extends BaseActivity {
         }
 
         public void setGroceryItemReference(DatabaseReference ref) {mDatabaseReference = ref;}
+
+        private void removeGroceryItem() {
+            mDatabaseReference.child(groceryItemId).removeValue();
+        }
     }
 
     @Override
