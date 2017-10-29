@@ -4,6 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+// Android Studio dynamically generated class,
+// created during build process to dynamically identify all assets
+// (from strings to android widgets to layouts), for usage in java classes in Android app
 import divideandconquer.zippy.R;
 
 

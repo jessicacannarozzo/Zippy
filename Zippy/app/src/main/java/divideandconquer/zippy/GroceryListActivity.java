@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -36,14 +38,14 @@ public class GroceryListActivity extends BaseActivity {
     public static final String EXTRA_POST_KEY = "post_key";
     private String mTodoKey;
 
-    //Databae references
+    //Database reference
     private DatabaseReference mGroceryListReference;
     private DatabaseReference mGroceryItemReference;
     private ValueEventListener mTodoListener;
     private GroceryListAdapter mAdapter;
 
     //UI Fields
-    private EditText mGroceryItemField;
+    private TextView mGroceryItemField;
     private Button mNewGroceryItemButton;
     private RecyclerView mTodoRecycler;
 
@@ -163,8 +165,10 @@ public class GroceryListActivity extends BaseActivity {
 
     public static class GroceryItemViewHolder extends RecyclerView.ViewHolder {
 
-        public CheckBox checkboxView;
-        public TextView itemNameView;
+        // these should all be private
+        private CheckBox checkboxView;
+        private TextView itemNameView;
+        private EditText editItemNameView;
         private GroceryItem groceryItem;
         private String groceryItemId;
         private DatabaseReference mDatabaseReference;
@@ -173,21 +177,111 @@ public class GroceryListActivity extends BaseActivity {
             super(itemView);
 
             checkboxView = itemView.findViewById(R.id.todo_checkbox);
+
+            // itemNameView and editItemNameView are different states of the same item text instance, necessary for switching between view/edit
             itemNameView = itemView.findViewById(R.id.todo_item_name);
+            editItemNameView = itemView.findViewById(R.id.todo_edit_item_name);
 
             //on checkbox checked:
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     groceryItem.checked = isChecked;
-//                    Log.w("Item: ", groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
+                    //Log.i("CHECKBOX","Item: "+ groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
                     mDatabaseReference.child(groceryItemId).setValue(groceryItem);
                 }
             });
+
+
+            //on item clicked for edition:
+            itemNameView.setOnClickListener(new android.view.View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+//                    Log.d("TEXTBOX-CLICK","Item text: "+ editItemNameView.getText() + "!!!");
+
+                    // when user clicks on an item, we make the editing box visible, and hide the textview
+                    itemNameView.setVisibility(View.GONE);
+                    editItemNameView.setVisibility(View.VISIBLE);
+                }
+            });
+
+            // The item text edition is saved and updates firebase whenever user changes focus or confirms on keyboard
+            // changing focus handler:
+            editItemNameView.setOnFocusChangeListener(
+                    new android.view.View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean onFocus) {
+                            if (!onFocus) {
+                                userUpdatedItem();
+                            }
+                        }
+                    }
+            );
+
+            // keyboard text editing confirmation handler:
+            editItemNameView.setOnEditorActionListener(
+                    new TextView.OnEditorActionListener() {
+
+                        @Override
+                        public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                            // listening for check confirmation button on keyboard is clicked
+                            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                userUpdatedItem();
+                                return true;
+
+                            } else {
+                                return false;
+                            }
+
+                        }
+                    }
+            );
         }
 
+
+        private void userUpdatedItem() {
+            // when updating an item text, we switch back the visibilities
+            itemNameView.setVisibility(View.VISIBLE);
+            editItemNameView.setVisibility(View.GONE);
+
+            // and update the text view with whatever the user typed before
+            updateText(this.editItemNameView.getText().toString());
+            updateCheckBox(this.checkboxView.isChecked());
+        }
+
+        private void updateText(String text) {
+
+            // we only need to update if the item text result on our app doesn't match the one on firebase
+            if (!this.groceryItem.item.equals(text)) {
+                this.groceryItem.item = text;
+                this.itemNameView.setText(text);
+                this.editItemNameView.setText(text);
+
+                mDatabaseReference.child(groceryItemId).setValue(groceryItem);
+            }
+        }
+
+        private void updateCheckBox(boolean checked) {
+
+            // we only need to update if the check box result on our app doesn't match the one on firebase
+            if (this.groceryItem.checked != checked) {
+                this.groceryItem.checked = checked;
+                this.checkboxView.setChecked(checked);
+
+                mDatabaseReference.child(groceryItemId).setValue(groceryItem);
+            }
+        }
+
+        // Refactor: grouped all attributes of an item here
         //refer to GroceryListAdapter.java > onBindViewHolder to see where we receive item
-        public void setGroceryItem(GroceryItem item) {groceryItem = item;}
-        public void setGroceryItemId(String item) {groceryItemId = item;}
+        public void setGroceryItem(GroceryItem item, String id) {
+            groceryItem = item;
+            groceryItemId = id;
+            this.itemNameView.setText(item.item);
+            this.checkboxView.setChecked(item.checked);
+            this.editItemNameView.setText(item.item);
+        }
+
         public void setGroceryItemReference(DatabaseReference ref) {mDatabaseReference = ref;}
     }
 

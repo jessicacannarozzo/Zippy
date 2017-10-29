@@ -86,11 +86,10 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         //position of grocery item in array
         GroceryItem groceryItem = mGroceryItems.get(position);
         String mGroceryItemId = mGroceryItemIds.get(position);
-        viewHolder.setGroceryItem(groceryItem);
-        viewHolder.setGroceryItemId(mGroceryItemId);
+
+        // Refactor: grouped all item attributes to be set in one function. setText() and setChecked moves to GroceryListActivity
+        viewHolder.setGroceryItem(groceryItem, mGroceryItemId);
         viewHolder.setGroceryItemReference(mDatabaseReference);
-        viewHolder.itemNameView.setText(groceryItem.item);
-        viewHolder.checkboxView.setChecked(groceryItem.checked);
     }
 
     @Override
