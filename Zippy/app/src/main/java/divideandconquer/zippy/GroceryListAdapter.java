@@ -89,6 +89,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
 
         // Refactor: grouped all item attributes to be set in one function. setText() and setChecked moves to GroceryListActivity
         viewHolder.setGroceryItem(groceryItem, mGroceryItemId);
+        viewHolder.setGroceryItemReference(mDatabaseReference);
     }
 
     @Override
