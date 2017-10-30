@@ -18,6 +18,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
+
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.User;
 
@@ -31,7 +33,7 @@ public class ShareListActivity extends BaseActivity {
     private static final String REQUIRED = "Required";
 
     public static final String EXTRA_POST_KEY = "post_key";
-    private String listID;
+    private String listKey;
 
     private DatabaseReference mDatabase;
 
@@ -44,8 +46,8 @@ public class ShareListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_list);
 
-        listID = getIntent().getStringExtra(EXTRA_POST_KEY);
-        if (listID == null) {
+        listKey = getIntent().getStringExtra(EXTRA_POST_KEY);
+        if (listKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
         }
 
@@ -70,10 +72,7 @@ public class ShareListActivity extends BaseActivity {
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
 
-
-//        DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
-
-        //check if person is in our DB
+        //check if email was entered
         if (isTargetValid(targetField)) {
             Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
 
@@ -81,13 +80,24 @@ public class ShareListActivity extends BaseActivity {
             //list -> access.push(targetUID)
             //targetUID->access.push(list ID)
             //increment usersCount
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+            final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
             userRef.orderByChild("email").addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     User targetUser = dataSnapshot.getValue(User.class);
                     if (targetUser.email.equals(targetEmail)) {
                         Log.i("Share List Email:", targetUser.email);
+//                        Log.i("Parent: ", dataSnapshot.getKey().toString()); target UID!!!
+                        String targetID = dataSnapshot.getKey().toString();
+
+                        //add list access to user
+                        targetUser.access.put(listKey, true); //add list to User's accessible lists
+                        userRef.child(targetID).setValue(targetUser); //update user in DB
+
+                        //add user access to list
+                        DatabaseReference listRef = FirebaseDatabase.getInstance().getReference("todo-lists").child(listKey);
+//                        ListItem updatedList = listRef.
+
                     }
                 }
 
@@ -104,17 +114,11 @@ public class ShareListActivity extends BaseActivity {
                 public void onCancelled(DatabaseError databaseError) {}
             });
 
-
-
-
-
-
         } else { //they're not in our DB
             Toast.makeText(this, "Person not found.", Toast.LENGTH_SHORT);
         }
 
     }
-
 
     //check if target email is valid (if it's in the DB)
     boolean isTargetValid(EditText targetField) {
