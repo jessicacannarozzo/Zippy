@@ -1,8 +1,8 @@
 package divideandconquer.zippy;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -14,9 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
@@ -35,8 +33,6 @@ public class ShareListActivity extends BaseActivity {
     public static final String EXTRA_POST_KEY = "post_key";
     private String listKey;
 
-    private DatabaseReference mDatabase;
-
     private EditText targetField;
 
     private FloatingActionButton mSubmitButton;
@@ -51,10 +47,6 @@ public class ShareListActivity extends BaseActivity {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
         }
 
-        // [START initialize_database_ref]
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        // [END initialize_database_ref]
-
         mSubmitButton = findViewById(R.id.fab_submit_share_list);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +60,7 @@ public class ShareListActivity extends BaseActivity {
     private void submitSharedList() {
         targetField = (EditText) findViewById(R.id.targetEmail); //get email field
         final String targetEmail = targetField.getText().toString(); //get target person's email
+        final Context context = this;
 
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
@@ -116,13 +109,15 @@ public class ShareListActivity extends BaseActivity {
                                 //transaction completed
                                 Log.i("Updated List: ", dataSnapshot.toString());
                                 Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+
+                                finish();
                             }
                         });
-
-
                     }
+                    Toast.makeText(context, "Person not found.", Toast.LENGTH_SHORT); //if it gets here without finish() being called
                 }
 
+                //do not remove or face the wrath of
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
@@ -135,24 +130,24 @@ public class ShareListActivity extends BaseActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {}
             });
+            setEditingEnabled(true);
 
         } else { //they're not in our DB
-            Toast.makeText(this, "Person not found.", Toast.LENGTH_SHORT);
+            Toast.makeText(context, "Invalid input.", Toast.LENGTH_SHORT);
         }
 
     }
 
     //check if target email is valid (if it's in the DB)
     boolean isTargetValid(EditText targetField) {
-        DatabaseReference ref = mDatabase.child("users");
+
 
         //check if field is empty
         if (targetField.getText().toString().trim().length() == 0) {
             targetField.setError("Error.");
             setEditingEnabled(true);
             return false;
-        } else { //check if target is in the DB
-            ref.orderByChild("email").equalTo(targetField.getText().toString());
+        } else { //check if it is an email
             return true;
         }
     }
