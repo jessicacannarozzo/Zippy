@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,42 +65,46 @@ public class ShareListActivity extends BaseActivity {
 
     private void submitSharedList() {
         targetField = (EditText) findViewById(R.id.targetEmail); //get email field
-//        String targetPerson = findViewById(R.id.targetEmail).toString(); //get target person's email
-        String targetPerson = targetField.toString(); //get target person's email
+        final String targetPerson = targetField.getText().toString(); //get target person's email
 
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
 
 
 //        DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
-//        DatabaseReference userRef = mDatabase.child("users");
 
         //check if person is in our DB
         if (isTargetValid(targetField)) {
             Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
-//            User target = getTargetUID(targetPerson); //get target's UID
 
             //add to access array in DB
             //list -> access.push(targetUID)
             //targetUID->access.push(list ID)
-            DatabaseReference ref = mDatabase.child("users");
-            Query userQuery = ref.orderByChild("email").equalTo(targetPerson);
-
-            userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+            userRef.orderByChild("email").addChildEventListener(new ChildEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot.exists()) {
-                        final User returnUser = dataSnapshot.getValue(User.class);
-                        Log.w(returnUser.email, "HEYYYY");
-//                    }
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    User targetUser = dataSnapshot.getValue(User.class);
+                    Log.i("123", targetUser.email);
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "Something went wrong...", databaseError.toException());
-                }
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
             });
-            
+
+
+
+
+
 
         } else { //they're not in our DB
             Toast.makeText(this, "Person not found.", Toast.LENGTH_SHORT);
@@ -115,21 +120,13 @@ public class ShareListActivity extends BaseActivity {
         //check if field is empty
         if (targetField.getText().toString().trim().length() == 0) {
             targetField.setError("Error.");
+            setEditingEnabled(true);
             return false;
         } else { //check if target is in the DB
             ref.orderByChild("email").equalTo(targetField.getText().toString());
             return true;
         }
     }
-
-
-    //get shared target's UID via email entered
-    //return: target User
-    //reference: https://stackoverflow.com/questions/39135619/java-firebase-search-by-child-value
-//    User getTargetUID(String email) {
-
-//    }
-    
 
     private void setEditingEnabled(boolean enabled) {
         targetField.setEnabled(enabled);
