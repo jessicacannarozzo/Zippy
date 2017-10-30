@@ -85,18 +85,40 @@ public class ShareListActivity extends BaseActivity {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     User targetUser = dataSnapshot.getValue(User.class);
-                    if (targetUser.email.equals(targetEmail)) {
-                        Log.i("Share List Email:", targetUser.email);
+                    if (targetUser.email.equals(targetEmail)) { //found target user
+//                        Log.i("Share List Email:", targetUser.email);
 //                        Log.i("Parent: ", dataSnapshot.getKey().toString()); target UID!!!
-                        String targetID = dataSnapshot.getKey().toString();
+                        final String targetID = dataSnapshot.getKey().toString();
 
                         //add list access to user
                         targetUser.access.put(listKey, true); //add list to User's accessible lists
                         userRef.child(targetID).setValue(targetUser); //update user in DB
 
-                        //add user access to list
+                        //add user access to list and update Userscount
                         DatabaseReference listRef = FirebaseDatabase.getInstance().getReference("todo-lists").child(listKey);
-//                        ListItem updatedList = listRef.
+                        listRef.runTransaction(new Transaction.Handler() {
+                            @Override
+                            public Transaction.Result doTransaction(MutableData mutableData) {
+                                ListItem updatedList = mutableData.getValue(ListItem.class);
+
+                                if (updatedList == null) return Transaction.success(mutableData); //something went wrong, but we'll still safely exit this
+
+                                updatedList.usersCount++; //increment usersCount
+                                updatedList.access.put(targetID, true);
+
+                                //Add listID -> access -> targetID: true and report success
+                                mutableData.setValue(updatedList);
+                                return Transaction.success(mutableData);
+                            }
+
+                            @Override
+                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                //transaction completed
+                                Log.i("Updated List: ", dataSnapshot.toString());
+                                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+                            }
+                        });
+
 
                     }
                 }
