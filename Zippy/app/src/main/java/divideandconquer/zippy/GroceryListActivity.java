@@ -191,9 +191,11 @@ public class GroceryListActivity extends BaseActivity {
             //on checkbox checked:
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    groceryItem.checked = isChecked;
-                    //Log.i("CHECKBOX","Item: "+ groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
-                    mDatabaseReference.child(groceryItemId).setValue(groceryItem);
+                    if (groceryItem != null) {
+                        groceryItem.checked = isChecked;
+                        //Log.i("CHECKBOX","Item: "+ groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
+                        mDatabaseReference.child(groceryItemId).setValue(groceryItem);
+                    }
                 }
             });
 
@@ -273,7 +275,7 @@ public class GroceryListActivity extends BaseActivity {
         private void updateText(String text) {
 
             // we only need to update if the item text result on our app doesn't match the one on firebase
-            if (!this.groceryItem.item.equals(text)) {
+            if (this.groceryItem != null && !this.groceryItem.item.equals(text)) {
                 this.groceryItem.item = text;
                 this.itemNameView.setText(text);
                 this.editItemNameView.setText(text);
@@ -285,7 +287,7 @@ public class GroceryListActivity extends BaseActivity {
         private void updateCheckBox(boolean checked) {
 
             // we only need to update if the check box result on our app doesn't match the one on firebase
-            if (this.groceryItem.checked != checked) {
+            if (this.groceryItem != null && this.groceryItem.checked != checked) {
                 this.groceryItem.checked = checked;
                 this.checkboxView.setChecked(checked);
 
@@ -295,15 +297,14 @@ public class GroceryListActivity extends BaseActivity {
 
         // Refactor: grouped all attributes of an item here
         //refer to GroceryListAdapter.java > onBindViewHolder to see where we receive item
-        public void setGroceryItem(GroceryItem item, String id) {
+        public void setGroceryItem(GroceryItem item, String id, DatabaseReference ref) {
+            this.mDatabaseReference = ref;
             groceryItem = item;
             groceryItemId = id;
             this.itemNameView.setText(item.item);
             this.checkboxView.setChecked(item.checked);
             this.editItemNameView.setText(item.item);
         }
-
-        public void setGroceryItemReference(DatabaseReference ref) {mDatabaseReference = ref;}
 
         private void removeGroceryItem(GroceryItem groceryItem, String groceryItemId, GroceryListAdapter groceryListAdapter) {
             // remove item from database
