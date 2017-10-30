@@ -71,17 +71,34 @@ public class ShareListActivity extends BaseActivity {
         setEditingEnabled(false);
 
 
-        DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
-        DatabaseReference userRef = mDatabase.child("users");
+//        DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
+//        DatabaseReference userRef = mDatabase.child("users");
 
         //check if person is in our DB
         if (isTargetValid(targetField)) {
             Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
-            int targetUID = getTargetUID(targetPerson); //get target's UID
+//            User target = getTargetUID(targetPerson); //get target's UID
 
             //add to access array in DB
             //list -> access.push(targetUID)
             //targetUID->access.push(list ID)
+            DatabaseReference ref = mDatabase.child("users");
+            Query userQuery = ref.orderByChild("email").equalTo(targetPerson);
+
+            userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.exists()) {
+                        final User returnUser = dataSnapshot.getValue(User.class);
+                        Log.w(returnUser.email, "HEYYYY");
+//                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Something went wrong...", databaseError.toException());
+                }
+            });
             
 
         } else { //they're not in our DB
@@ -100,33 +117,18 @@ public class ShareListActivity extends BaseActivity {
             targetField.setError("Error.");
             return false;
         } else { //check if target is in the DB
-            ref.orderByChild("email").equalTo(targetField.getText().toString())
+            ref.orderByChild("email").equalTo(targetField.getText().toString());
+            return true;
         }
     }
 
 
     //get shared target's UID via email entered
-    //return: target UID
+    //return: target User
     //reference: https://stackoverflow.com/questions/39135619/java-firebase-search-by-child-value
-    int getTargetUID(String email) {
-        DatabaseReference ref = mDatabase.child("users");
-        Query userQuery = ref.orderByKey().equalTo(email);
+//    User getTargetUID(String email) {
 
-        userQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    return dataSnapshot.getKey();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "Something went wrong...", databaseError.toException());
-            }
-        });
-        return 0;
-    }
+//    }
     
 
     private void setEditingEnabled(boolean enabled) {
