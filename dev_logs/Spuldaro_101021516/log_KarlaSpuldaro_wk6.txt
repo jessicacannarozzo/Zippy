@@ -2,6 +2,7 @@ Week 6 Duties:
 
 - Worked on D2 report diagram with the team (conference call + shared doc): 2h
 - Reviewing existing code, research and implementation of edit item feature: 6h
+
 - Research and implementation of remove item feature + bug fix: 4.5h
 
 Total: 12.5h
