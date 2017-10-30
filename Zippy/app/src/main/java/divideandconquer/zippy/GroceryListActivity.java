@@ -217,7 +217,7 @@ public class GroceryListActivity extends BaseActivity {
                         @Override
                         public void onFocusChange(View view, boolean onFocus) {
                             if (!onFocus) {
-                                userUpdatedItem();
+                                userUpdatedItem(groceryListAdapter);
                             }
                         }
                     }
@@ -231,7 +231,7 @@ public class GroceryListActivity extends BaseActivity {
                         public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                             // listening for check confirmation button on keyboard is clicked
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                userUpdatedItem();
+                                userUpdatedItem(groceryListAdapter);
                                 return true;
 
                             } else {
@@ -251,14 +251,23 @@ public class GroceryListActivity extends BaseActivity {
             });
         }
 
-        private void userUpdatedItem() {
+        private void userUpdatedItem(GroceryListAdapter groceryListAdapter) {
             // when updating an item text, we switch back the visibilities
             itemNameView.setVisibility(View.VISIBLE);
             editItemNameView.setVisibility(View.GONE);
 
-            // and update the text view with whatever the user typed before
-            updateText(this.editItemNameView.getText().toString());
-            updateCheckBox(this.checkboxView.isChecked());
+            String newText = this.editItemNameView.getText().toString();
+
+            if (!newText.isEmpty()){
+                // and update the text view with whatever the user typed before
+                updateText(newText);
+                updateCheckBox(this.checkboxView.isChecked());
+            }
+            else{
+                // if the string is empty, we remove the item from the list
+                removeGroceryItem(groceryItem, groceryItemId, groceryListAdapter);
+            }
+
         }
 
         private void updateText(String text) {
