@@ -333,7 +333,11 @@ public class GroceryListActivity extends BaseActivity {
             finish();
             return true;
 
-        } else {
+        } else if (i == R.id.reset){
+//            Log.i("RESET", "reset clicked!");
+            return true;
+        }
+        else {
             return super.onOptionsItemSelected(item);
         }
     }
