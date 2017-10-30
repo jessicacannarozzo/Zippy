@@ -77,8 +77,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.grocery_item, parent, false);
 
-
-        return new GroceryListActivity.GroceryItemViewHolder(view);
+        // Refactor: also pass this instance to simplify the references that only this adapter holds. Useful when removing a list item.
+        return new GroceryListActivity.GroceryItemViewHolder(view, this);
     }
 
     @Override
@@ -99,4 +99,10 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         }
     }
 
+    public void removeGroceryItem(GroceryItem groceryItem, String id) {
+        int index = mGroceryItemIds.indexOf(id);
+        mGroceryItemIds.remove(index);
+        mGroceryItems.remove(index);
+        notifyItemRemoved(index);
+    }
 }
