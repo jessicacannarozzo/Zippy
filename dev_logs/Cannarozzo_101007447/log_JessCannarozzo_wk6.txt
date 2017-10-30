@@ -1,2 +1,4 @@
 - .5 Discussing D2 diagram
-- 4h Share List feature
+- 4.5h Share List feature
+
+Total: 5h

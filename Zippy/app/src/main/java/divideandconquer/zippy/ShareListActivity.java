@@ -31,7 +31,7 @@ public class ShareListActivity extends BaseActivity {
     private static final String REQUIRED = "Required";
 
     public static final String EXTRA_POST_KEY = "post_key";
-    private String mTodoKey;
+    private String listID;
 
     private DatabaseReference mDatabase;
 
@@ -44,8 +44,8 @@ public class ShareListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_list);
 
-        mTodoKey = getIntent().getStringExtra(EXTRA_POST_KEY);
-        if (mTodoKey == null) {
+        listID = getIntent().getStringExtra(EXTRA_POST_KEY);
+        if (listID == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
         }
 
@@ -65,7 +65,7 @@ public class ShareListActivity extends BaseActivity {
 
     private void submitSharedList() {
         targetField = (EditText) findViewById(R.id.targetEmail); //get email field
-        final String targetPerson = targetField.getText().toString(); //get target person's email
+        final String targetEmail = targetField.getText().toString(); //get target person's email
 
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
@@ -80,12 +80,15 @@ public class ShareListActivity extends BaseActivity {
             //add to access array in DB
             //list -> access.push(targetUID)
             //targetUID->access.push(list ID)
+            //increment usersCount
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
             userRef.orderByChild("email").addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     User targetUser = dataSnapshot.getValue(User.class);
-                    Log.i("123", targetUser.email);
+                    if (targetUser.email.equals(targetEmail)) {
+                        Log.i("Share List Email:", targetUser.email);
+                    }
                 }
 
                 @Override
