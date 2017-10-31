@@ -1,19 +1,22 @@
 package divideandconquer.zippy;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+
+import java.util.Map;
 
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.User;
@@ -28,11 +31,9 @@ public class ShareListActivity extends BaseActivity {
     private static final String REQUIRED = "Required";
 
     public static final String EXTRA_POST_KEY = "post_key";
-    private String mTodoKey;
+    private String listKey;
 
-    private DatabaseReference mDatabase;
-
-    private EditText mListNameField;
+    private EditText targetField;
 
     private FloatingActionButton mSubmitButton;
 
@@ -41,16 +42,11 @@ public class ShareListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_list);
 
-        mTodoKey = getIntent().getStringExtra(EXTRA_POST_KEY);
-        if (mTodoKey == null) {
+        listKey = getIntent().getStringExtra(EXTRA_POST_KEY);
+        if (listKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
         }
 
-        // [START initialize_database_ref]
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        // [END initialize_database_ref]
-
-        mListNameField = findViewById(R.id.share_list_title);
         mSubmitButton = findViewById(R.id.fab_submit_share_list);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -62,76 +58,107 @@ public class ShareListActivity extends BaseActivity {
     }
 
     private void submitSharedList() {
-        final String listName = mListNameField.getText().toString();
-
-        // listName is required
-        if (TextUtils.isEmpty(listName)) {
-            mListNameField.setError(REQUIRED);
-            return;
-        }
+        targetField = (EditText) findViewById(R.id.targetEmail); //get email field
+        final String targetEmail = targetField.getText().toString(); //get target person's email
+        final Context context = this;
 
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
-        Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
 
-        DatabaseReference todoListRef = mDatabase.child("todo-list").child(mTodoKey);
-        DatabaseReference userRef = mDatabase.child("users");
+        //check if email was entered
+        if (isTargetValid(targetField)) {
+            Toast.makeText(this, "Sharing...", Toast.LENGTH_SHORT).show();
 
-        //add access to users
-        userRef.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                User p = mutableData.getValue(User.class);
-                if (p == null) { //no need to update
-                    return Transaction.success(mutableData);
+            //add to access array in DB
+            //list -> access.push(targetUID)
+            //targetUID->access.push(list ID)
+            //increment usersCount
+            final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+            userRef.orderByChild("email").addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    User targetUser = dataSnapshot.getValue(User.class);
+                    if (targetUser.email.equals(targetEmail)) { //found target user
+//                        Log.i("Share List Email:", targetUser.email);
+//                        Log.i("Parent: ", dataSnapshot.getKey().toString()); target UID!!!
+                        final String targetID = dataSnapshot.getKey().toString();
+
+                        //add list access to user
+                        targetUser.access.put(listKey, true); //add list to User's accessible lists
+                        userRef.child(targetID).setValue(targetUser); //update user in DB
+
+                        //add user access to list and update Userscount
+                        DatabaseReference listRef = FirebaseDatabase.getInstance().getReference("todo-lists").child(listKey);
+                        listRef.runTransaction(new Transaction.Handler() {
+                            @Override
+                            public Transaction.Result doTransaction(MutableData mutableData) {
+                                ListItem updatedList = mutableData.getValue(ListItem.class);
+
+                                if (updatedList == null) return Transaction.success(mutableData); //something went wrong, but we'll still safely exit this
+
+                                updatedList.usersCount++; //increment usersCount
+                                updatedList.access.put(targetID, true);
+
+
+                                //add to shared lists
+                                DatabaseReference sharedLists= FirebaseDatabase.getInstance().getReference("shared-Lists");
+                                sharedLists.child(targetID).child(listKey).setValue(updatedList);
+
+                                //Add listID -> access -> targetID: true and report success
+                                mutableData.setValue(updatedList);
+                                return Transaction.success(mutableData);
+                            }
+
+                            @Override
+                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                //transaction completed
+                                Log.i("Updated List: ", dataSnapshot.toString());
+                                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+
+                                finish();
+                            }
+                        });
+                    }
+                    Toast.makeText(context, "Person not found.", Toast.LENGTH_SHORT); //if it gets here without finish() being called
                 }
 
-                //add list to new user's accessible lists
-                p.access.put(mTodoKey, true);
-                
-                // Set value and report transaction success
-                mutableData.setValue(p);
-                return Transaction.success(mutableData);
-            }
+                //do not remove or face the wrath of
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b,
-                                   DataSnapshot dataSnapshot) {
-                // Transaction completed
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-            }
-        });
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
-        //add access to list
-        todoListRef.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                ListItem p = mutableData.getValue(ListItem.class);
-                if (p == null) {
-                    return Transaction.success(mutableData);
-                }
-//                p.access.put("7SrRbdVQMZX22T2wDpOTLslIClF2", true);
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
-                //grant access to new user from the list
-//                p.access.put(listName, true);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+            setEditingEnabled(true);
 
-                // Set value and report transaction success
-                mutableData.setValue(p);
-                return Transaction.success(mutableData);
-            }
+        } else { //they're not in our DB
+            Toast.makeText(context, "Invalid input.", Toast.LENGTH_SHORT);
+        }
 
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b,
-                                   DataSnapshot dataSnapshot) {
-                // Transaction completed
-                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
-                finish();
-            }
-        });
+    }
+
+    //check if target email is valid (if it's in the DB)
+    boolean isTargetValid(EditText targetField) {
+
+
+        //check if field is empty
+        if (targetField.getText().toString().trim().length() == 0) {
+            targetField.setError("Error.");
+            setEditingEnabled(true);
+            return false;
+        } else { //check if it is an email
+            return true;
+        }
     }
 
     private void setEditingEnabled(boolean enabled) {
-        mListNameField.setEnabled(enabled);
+        targetField.setEnabled(enabled);
         if (enabled) {
             mSubmitButton.setVisibility(View.VISIBLE);
         } else {

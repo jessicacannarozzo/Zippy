@@ -12,7 +12,7 @@ public class ListItem {
     public String uid;
     public String author;
     public String listName;
-    public int usersCount = 0;
+    public int usersCount = 1;
     public Map<String, Boolean> access = new HashMap<>();
 
     public ListItem() {

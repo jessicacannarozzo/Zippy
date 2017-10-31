@@ -1,0 +1,4 @@
+- 6h Share List Feature
+	- 1h Error catching
+
+Total: 6h
