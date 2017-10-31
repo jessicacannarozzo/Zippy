@@ -99,6 +99,11 @@ public class ShareListActivity extends BaseActivity {
                                 updatedList.usersCount++; //increment usersCount
                                 updatedList.access.put(targetID, true);
 
+
+                                //add to shared lists
+                                DatabaseReference sharedLists= FirebaseDatabase.getInstance().getReference("shared-Lists");
+                                sharedLists.child(targetID).child(listKey).setValue(updatedList);
+
                                 //Add listID -> access -> targetID: true and report success
                                 mutableData.setValue(updatedList);
                                 return Transaction.success(mutableData);

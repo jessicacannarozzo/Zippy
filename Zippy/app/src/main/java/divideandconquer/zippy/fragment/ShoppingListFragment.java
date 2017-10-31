@@ -68,7 +68,6 @@ public abstract class ShoppingListFragment extends Fragment {
         Query postsQuery = getQuery(mDatabase);
 
 
-
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ListItem>()
                 .setQuery(postsQuery, ListItem.class)
                 .build();

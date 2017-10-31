@@ -12,10 +12,11 @@ public class RecentShoppingListFragment extends ShoppingListFragment {
         // [START recent_posts_query]
         // Last 100 posts, these are automatically the 100 most recent
         // due to sorting by push() keys
-        Query recentPostsQuery = databaseReference.child("todo-lists")
-                .limitToFirst(100);
+//        Query recentPostsQuery = databaseReference.child("todo-lists")
+//                .limitToFirst(100);
         // [END recent_posts_query]
 
-        return recentPostsQuery;
+        Query keyQuery = databaseReference.getDatabase().getReference("shared-lists").child(getUid());
+        return keyQuery;
     }
 }
