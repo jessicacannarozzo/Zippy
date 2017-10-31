@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity {
             };
             private final String[] mFragmentNames = new String[] {
                     getString(R.string.heading_my_lists),
-                    "Recent"
+                    "Shared Lists"
 
             };
             @Override
