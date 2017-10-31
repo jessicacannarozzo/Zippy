@@ -20,7 +20,7 @@ public class RecentShoppingListFragment extends ShoppingListFragment {
 
     public Query getQuery(final DatabaseReference databaseReference) {
 
-        Query keyQuery = databaseReference.getDatabase().getReference("shared-lists").child(getUid());
+        Query keyQuery = databaseReference.child("shared-Lists").child(getUid());
         return keyQuery;
     }
 }
