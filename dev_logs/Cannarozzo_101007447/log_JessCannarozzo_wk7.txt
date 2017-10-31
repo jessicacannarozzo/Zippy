@@ -1,4 +1,7 @@
 - 6h Share List Feature
 	- 1h Error catching
+	- .5h adding share-list subset to database
 
-Total: 6h
+- 2h Group Meeting
+
+Total: 8.5h
