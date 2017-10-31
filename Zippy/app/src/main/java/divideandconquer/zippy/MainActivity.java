@@ -29,7 +29,7 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 
 import divideandconquer.zippy.fragment.MyShoppingListFragment;
-import divideandconquer.zippy.fragment.RecentShoppingListFragment;
+import divideandconquer.zippy.fragment.ShareShoppingListFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity {
         mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             private final Fragment[] mFragments = new Fragment[] {
                     new MyShoppingListFragment(),
-                    new RecentShoppingListFragment()
+                    new ShareShoppingListFragment()
             };
             private final String[] mFragmentNames = new String[] {
                     getString(R.string.heading_my_lists),
