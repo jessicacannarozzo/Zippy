@@ -30,6 +30,6 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToListItem(ListItem listItem) {
         nameView.setText(listItem.listName);
-        numSharesView.setText(String.valueOf(listItem.access.size()));
+        numSharesView.setText(String.valueOf(listItem.usersCount));
     }
 }

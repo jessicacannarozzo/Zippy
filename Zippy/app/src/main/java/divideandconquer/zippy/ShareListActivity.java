@@ -16,7 +16,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.User;
@@ -55,6 +57,14 @@ public class ShareListActivity extends BaseActivity {
                 submitSharedList();
             }
         });
+    }
+
+    private void updateSharedLists(ListItem updatedList) {
+        for (String account : updatedList.access.keySet()) {
+            DatabaseReference listRef = FirebaseDatabase.getInstance().getReference("shared-lists").child(account);
+
+
+        }
     }
 
     private void submitSharedList() {
@@ -103,6 +113,20 @@ public class ShareListActivity extends BaseActivity {
                                 //add to shared lists
                                 DatabaseReference sharedLists= FirebaseDatabase.getInstance().getReference("shared-Lists");
                                 sharedLists.child(targetID).child(listKey).setValue(updatedList);
+
+                                //Remove users key from keyset
+                                Set<String> usersKeySet = updatedList.access.keySet();
+                                usersKeySet.remove(updatedList.uid);
+
+                                //Update the rest of the shared-accounts
+                                for (String userKey : usersKeySet) {
+                                    sharedLists.child(userKey).child(listKey).setValue(updatedList);
+                                }
+
+                                //update the owners user-list
+                                DatabaseReference ownerUserRef = FirebaseDatabase.getInstance().getReference("user-lists").child(updatedList.uid);
+                                ownerUserRef.child(listKey).setValue(updatedList);
+
 
                                 //Add listID -> access -> targetID: true and report success
                                 mutableData.setValue(updatedList);
