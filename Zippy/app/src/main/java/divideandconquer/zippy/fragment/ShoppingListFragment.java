@@ -87,11 +87,11 @@ public abstract class ShoppingListFragment extends Fragment {
 
                 final String postKey = listRef.getKey();
 
-                //If the usersCount is less then one, the shared icon is invisible
+                //If the usersCount is less then one, the shared icon is replaced with the person icon
                 if (model.usersCount <= 1) {
-                    viewHolder.sharedView.setVisibility(View.INVISIBLE);
+                    viewHolder.sharedView.setImageResource(R.drawable.ic_person_black_24dp);
                 } else {
-                    viewHolder.sharedView.setVisibility(View.VISIBLE);
+                    viewHolder.sharedView.setImageResource(R.drawable.ic_group_black_24dp);
                 }
 
                 // Set click listener for the whole list view
