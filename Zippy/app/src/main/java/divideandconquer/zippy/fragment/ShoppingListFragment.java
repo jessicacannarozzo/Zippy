@@ -87,6 +87,13 @@ public abstract class ShoppingListFragment extends Fragment {
 
                 final String postKey = listRef.getKey();
 
+                //If the usersCount is less then one, the shared icon is invisible
+                if (model.usersCount <= 1) {
+                    viewHolder.sharedView.setVisibility(View.INVISIBLE);
+                } else {
+                    viewHolder.sharedView.setVisibility(View.VISIBLE);
+                }
+
                 // Set click listener for the whole list view
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -123,7 +123,7 @@ public class ShareListActivity extends BaseActivity {
                                     sharedLists.child(userKey).child(listKey).setValue(updatedList);
                                 }
 
-                                //update the owners user-list
+                                //update the owners user-lists
                                 DatabaseReference ownerUserRef = FirebaseDatabase.getInstance().getReference("user-lists").child(updatedList.uid);
                                 ownerUserRef.child(listKey).setValue(updatedList);
 
