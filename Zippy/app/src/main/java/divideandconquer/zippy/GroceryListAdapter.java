@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import divideandconquer.zippy.models.GroceryItem;
+import divideandconquer.zippy.models.ListItem;
 
 /**
  * Created by navi on 21/10/17.
@@ -49,6 +50,21 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                GroceryItem newItem = dataSnapshot.getValue(GroceryItem.class);
+                String groceryKey = dataSnapshot.getKey();
+
+                // [START_EXCLUDE]
+                int groceryIndex = mGroceryItemIds.indexOf(groceryKey);
+                if (groceryIndex > -1) {
+                    // Replace with the new data
+                    mGroceryItems.set(groceryIndex, newItem);
+
+                    // Update the RecyclerView
+                    notifyItemChanged(groceryIndex);
+                } else {
+                    Log.w(TAG, "onChildChanged:unknown_child:" + groceryKey);
+                }
+
             }
 
             @Override
