@@ -130,6 +130,7 @@ public class ShareListActivity extends BaseActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
+                                                Toast.makeText(context, "User Already has access.", Toast.LENGTH_SHORT).show(); //if it gets here without finish() being called
                                             }
                                         });
 
