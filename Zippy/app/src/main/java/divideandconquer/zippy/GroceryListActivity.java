@@ -15,10 +15,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -169,6 +171,7 @@ public class GroceryListActivity extends BaseActivity {
 
         // these should all be private
         private CheckBox checkboxView;
+        private ImageView photoView;
         private TextView itemNameView;
         private EditText editItemNameView;
         private GroceryItem groceryItem;
@@ -187,6 +190,7 @@ public class GroceryListActivity extends BaseActivity {
             itemNameView = itemView.findViewById(R.id.todo_item_name);
             editItemNameView = itemView.findViewById(R.id.todo_edit_item_name);
             mRemoveGroceryItemButton = itemView.findViewById(R.id.button_todo_rem_item);
+            photoView = itemView.findViewById(R.id.todo_author_photo);
 
             //on checkbox checked:
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -251,6 +255,9 @@ public class GroceryListActivity extends BaseActivity {
                     removeGroceryItem(groceryItem, groceryItemId, groceryListAdapter);
                 }
             });
+
+
+
         }
 
         private void userUpdatedItem(GroceryListAdapter groceryListAdapter) {
@@ -304,6 +311,15 @@ public class GroceryListActivity extends BaseActivity {
             this.itemNameView.setText(item.item);
             this.checkboxView.setChecked(item.checked);
             this.editItemNameView.setText(item.item);
+
+            //Set the profile image
+            String name = this.groceryItem.author.substring(0,1).toUpperCase();
+            if (name.length() == 1) {
+                int color = UserProfileColorService.getInstance().getGenerator().getColor(this.groceryItem.uid);
+                TextDrawable drawable = TextDrawable.builder()
+                        .buildRound(name, color);
+                this.photoView.setImageDrawable(drawable);
+            }
         }
 
         private void removeGroceryItem(GroceryItem groceryItem, String groceryItemId, GroceryListAdapter groceryListAdapter) {
