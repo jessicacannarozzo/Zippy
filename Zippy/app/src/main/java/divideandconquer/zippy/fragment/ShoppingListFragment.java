@@ -1,5 +1,6 @@
 package divideandconquer.zippy.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,9 +14,13 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import divideandconquer.zippy.GroceryListActivity;
 import divideandconquer.zippy.R;
@@ -31,13 +36,12 @@ public abstract class ShoppingListFragment extends Fragment {
 
     private static final String TAG = "ShoppingListFragment";
 
-    private DatabaseReference mDatabase;
-    // [END define_database_reference]
-
-    private FirebaseRecyclerAdapter<ListItem, ListViewHolder> mAdapter;
-    private RecyclerView mRecycler;
-    private LinearLayoutManager mManager;
-    private TextDrawable.IBuilder cBuilder;
+    protected DatabaseReference mDatabase;
+    protected FirebaseRecyclerAdapter<ListItem, ListViewHolder> mAdapter;
+    protected RecyclerView mRecycler;
+    protected LinearLayoutManager mManager;
+    protected TextDrawable.IBuilder cBuilder;
+    protected TestAdapter test;
 
     public ShoppingListFragment() {}
 
@@ -76,6 +80,7 @@ public abstract class ShoppingListFragment extends Fragment {
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
+        /*
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = getQuery(mDatabase);
 
@@ -83,6 +88,7 @@ public abstract class ShoppingListFragment extends Fragment {
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ListItem>()
                 .setQuery(postsQuery, ListItem.class)
                 .build();
+
 
         mAdapter = new FirebaseRecyclerAdapter<ListItem, ListViewHolder>(options) {
 
@@ -130,35 +136,86 @@ public abstract class ShoppingListFragment extends Fragment {
 
             }
         };
-        mRecycler.setAdapter(mAdapter);
-    }
-
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (mAdapter != null) {
-            mAdapter.startListening();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAdapter != null) {
-            mAdapter.stopListening();
-        }
+        */
+        test = getAdapter(mDatabase);
+        mRecycler.setAdapter(test);
     }
 
 
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
-
     public abstract Query getQuery(DatabaseReference databaseReference);
+    protected abstract TestAdapter getAdapter(final DatabaseReference ref);
 
+    public abstract class TestAdapter extends RecyclerView.Adapter<ListViewHolder> {
+        private static final String TAG = "GroceryListAdapter";
+        protected DatabaseReference mDatabaseReference;
+        protected DatabaseReference mAllListsReference;
+        protected ChildEventListener mChildEventListener;
 
+        protected List<String> mGroceryItemIds;
+        protected List<ListItem> mGroceryItems;
+
+        public TestAdapter(DatabaseReference ref) {
+            super();
+            mGroceryItemIds = new ArrayList<>();
+            mGroceryItems = new ArrayList<>();
+            mAllListsReference = ref.child("todo-lists");
+            mChildEventListener = blah();
+            mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+
+        public abstract ChildEventListener blah();
+
+        @Override
+        public ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            View view = inflater.inflate(R.layout.item_list, parent, false);
+            return new ListViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ListViewHolder holder, int position) {
+            ListItem groceryItem = mGroceryItems.get(position);
+            String mGroceryItemId = mGroceryItemIds.get(position);
+
+            final String postKey = mGroceryItemId;
+
+            if (groceryItem.usersCount <= 1) {
+                holder.sharedView.setImageResource(R.drawable.ic_person_black_24dp);
+            } else {
+                holder.sharedView.setImageResource(R.drawable.ic_group_black_24dp);
+            }
+
+            //Generate an icon using the first letter of their username
+            String name = groceryItem.author.substring(0,1).toUpperCase();
+            if (name.length() == 1) {
+                int color = UserProfileColorService.getInstance().getGenerator().getColor(groceryItem.uid);
+                TextDrawable drawable = cBuilder.build(name, color);
+                holder.photoView.setImageDrawable(drawable);
+            }
+
+            // Set click listener for the whole list view
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Launch PostDetailActivity
+                    Intent intent = new Intent(getActivity(), GroceryListActivity.class);
+                    intent.putExtra(GroceryListActivity.EXTRA_POST_KEY, postKey);
+
+                    startActivity(intent);
+                }
+            });
+
+            holder.bindToListItem(groceryItem);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mGroceryItems.size();
+        }
+    }
 
 }
 

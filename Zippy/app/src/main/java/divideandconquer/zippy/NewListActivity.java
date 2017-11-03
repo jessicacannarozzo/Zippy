@@ -123,19 +123,8 @@ public class NewListActivity extends BaseActivity {
         //Add user to access
         listItem.access.put(userId, true);
 
-        Map<String, Object> postValues = listItem.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/todo-lists/" + key, postValues);
-        childUpdates.put("/user-lists/" + userId + "/" + key, postValues);
-        mDatabase.updateChildren(childUpdates);
-
-        //Update the users access table with the new post id.
-        DatabaseReference postsRef = mDatabase.child("/users/" + userId + "/" + "access");
-        Map<String, Object> hopperUpdates = new HashMap<String, Object>();
-        hopperUpdates.put(key, true);
-        postsRef.updateChildren(hopperUpdates);
-
+        mDatabase.child("owned").child(userId).child(key).setValue(true);
+        mDatabase.child("todo-lists").child(key).setValue(listItem);
 
 
 
