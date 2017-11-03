@@ -1,7 +1,10 @@
-- 6h Share List Feature
+- 6.5h Share List Feature
 	- 1h Error catching
 	- .5h adding share-list subset to database
 
-- 1.5h Group Meeting
+- 3h Group Meetings
+	- 1.5h Monday
+	- 1h Wednesday 
+	- .5h Friday
 
-Total: 8h
+Total: 9.5h
