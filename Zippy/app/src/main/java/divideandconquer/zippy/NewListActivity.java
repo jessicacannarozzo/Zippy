@@ -120,8 +120,6 @@ public class NewListActivity extends BaseActivity {
         // /posts/$postid simultaneously
         String key = mDatabase.child("todo-lists").push().getKey();
         ListItem listItem = new ListItem(userId, username, listName);
-        //Add user to access
-        listItem.access.put(userId, true);
 
         mDatabase.child("owned").child(userId).child(key).setValue(true);
         mDatabase.child("todo-lists").child(key).setValue(listItem);

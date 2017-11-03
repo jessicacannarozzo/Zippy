@@ -5,6 +5,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import divideandconquer.zippy.models.ListItem;
 
@@ -64,7 +65,21 @@ public class MyShoppingListFragment extends ShoppingListFragment {
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        mAllListsReference.child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                ListItem item = dataSnapshot.getValue(ListItem.class);
+                                int index = mGroceryItemIds.indexOf(dataSnapshot.getKey());
+                                mGroceryItemIds.remove(index);
+                                mGroceryItems.remove(index);
+                                notifyItemRemoved(index);
+                            }
 
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                     }
 
                     @Override
