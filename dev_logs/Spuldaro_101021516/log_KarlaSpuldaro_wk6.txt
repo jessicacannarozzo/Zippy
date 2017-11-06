@@ -5,4 +5,3 @@ Week 6 Duties:
 - Research and implementation of remove item feature + bug fix: 4.5h
 
 Total: 12.5h
-
