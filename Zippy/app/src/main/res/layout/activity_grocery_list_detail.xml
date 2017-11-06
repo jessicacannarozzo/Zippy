@@ -29,8 +29,6 @@
         android:layout_below="@+id/comment_form"
         tools:listitem="@layout/todo_item_list" />
 
-
-
     <LinearLayout
         android:id="@+id/comment_form"
         android:layout_width="match_parent"
@@ -42,7 +40,7 @@
         <EditText
             android:id="@+id/field_todo_item_text"
             android:layout_width="0dp"
-            android:layout_weight="0.8"
+            android:layout_weight="0.85"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:hint="Add a new Item..."/>
@@ -51,9 +49,13 @@
             android:id="@+id/button_add_new_todo_item"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.15"
             android:layout_height="wrap_content"
-            android:text="+"/>
+            android:text="+"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+
 
     </LinearLayout>
 

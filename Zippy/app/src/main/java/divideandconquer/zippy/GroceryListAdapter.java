@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import divideandconquer.zippy.models.GroceryItem;
+import divideandconquer.zippy.models.ListItem;
 
 /**
  * Created by navi on 21/10/17.
@@ -49,6 +50,21 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                GroceryItem newItem = dataSnapshot.getValue(GroceryItem.class);
+                String groceryKey = dataSnapshot.getKey();
+
+                // [START_EXCLUDE]
+                int groceryIndex = mGroceryItemIds.indexOf(groceryKey);
+                if (groceryIndex > -1) {
+                    // Replace with the new data
+                    mGroceryItems.set(groceryIndex, newItem);
+
+                    // Update the RecyclerView
+                    notifyItemChanged(groceryIndex);
+                } else {
+                    Log.w(TAG, "onChildChanged:unknown_child:" + groceryKey);
+                }
+
             }
 
             @Override
@@ -77,8 +93,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.grocery_item, parent, false);
 
-
-        return new GroceryListActivity.GroceryItemViewHolder(view);
+        // Refactor: also pass this instance to simplify the references that only this adapter holds. Useful when removing a list item.
+        return new GroceryListActivity.GroceryItemViewHolder(view, this);
     }
 
     @Override
@@ -99,4 +115,10 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         }
     }
 
+    public void removeGroceryItem(GroceryItem groceryItem, String id) {
+        int index = mGroceryItemIds.indexOf(id);
+        mGroceryItemIds.remove(index);
+        mGroceryItems.remove(index);
+        notifyItemRemoved(index);
+    }
 }

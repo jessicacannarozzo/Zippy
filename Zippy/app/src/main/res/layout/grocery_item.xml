@@ -1,42 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/todo_author_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_account_circle_40" />
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
 
     <CheckBox
         android:id="@+id/todo_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:checked="false" />
 
     <TextView
         android:id="@+id/todo_item_name"
         style="@style/Base.TextAppearance.AppCompat.Small"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_weight="0.8"
         android:clickable="true"
         tools:text="Soap" />
 
     <EditText
         android:id="@+id/todo_edit_item_name"
         style="@style/Base.TextAppearance.AppCompat.Small"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.8"
         android:layout_marginLeft="10dp"
         android:clickable="true"
         android:inputType="text"
         android:maxLines="1"
         android:visibility="gone" />
+
+    <Button
+        android:id="@+id/button_todo_rem_item"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0dp"
+        android:text="-"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
 
 </LinearLayout>
