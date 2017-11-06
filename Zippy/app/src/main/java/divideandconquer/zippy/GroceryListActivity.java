@@ -252,7 +252,7 @@ public class GroceryListActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
 //                    Log.d("REMOVE-ITEM","Item to be removed: "+ itemNameView.getText());
-                    removeGroceryItem(groceryItem, groceryItemId, groceryListAdapter);
+                    removeGroceryItem();
                 }
             });
 
@@ -274,7 +274,7 @@ public class GroceryListActivity extends BaseActivity {
             }
             else{
                 // if the string is empty, we remove the item from the list
-                removeGroceryItem(groceryItem, groceryItemId, groceryListAdapter);
+                removeGroceryItem();
             }
 
         }
@@ -322,12 +322,9 @@ public class GroceryListActivity extends BaseActivity {
             }
         }
 
-        private void removeGroceryItem(GroceryItem groceryItem, String groceryItemId, GroceryListAdapter groceryListAdapter) {
+        private void removeGroceryItem() {
             // remove item from database
             mDatabaseReference.child(this.groceryItemId).removeValue();
-
-            // remove item from our app
-            groceryListAdapter.removeGroceryItem(groceryItem, groceryItemId);
         }
     }
 

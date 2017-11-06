@@ -13,11 +13,8 @@ public class User {
     public String username;
     public String email;
     public String displayName;
-    public Map<String, Boolean> access = new HashMap<>();
 
-
-    public User() {
-    }
+    public User() {}
 
     public User(String username, String email, String displayName) {
         this.username = username;
