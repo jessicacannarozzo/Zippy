@@ -13,7 +13,6 @@ public class ListItem {
     public String author;
     public String listName;
     public int usersCount = 1;
-    public Map<String, Boolean> access = new HashMap<>();
 
     public ListItem() {
     }
@@ -31,8 +30,6 @@ public class ListItem {
         result.put("author", author);
         result.put("listName", listName);
         result.put("usersCount", usersCount);
-        result.put("access", access);
-
         return result;
     }
 

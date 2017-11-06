@@ -46,6 +46,8 @@ public class ShareListActivity extends BaseActivity {
 
     private FloatingActionButton mSubmitButton;
 
+    private DatabaseReference ref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +76,8 @@ public class ShareListActivity extends BaseActivity {
 
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
+
+        ref = FirebaseDatabase.getInstance().getReference();
 
         //check if it is the same email as the current user
         if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(targetEmail)) {
@@ -112,85 +116,35 @@ public class ShareListActivity extends BaseActivity {
                         if (targetUser.email.equals(targetEmail)) { //found target user
                             Log.i("Share List Email:", targetUser.email);
 
-                            //add list access to user
-                            targetUser.access.put(listKey, true); //add list to User's accessible lists
-                            userRef.child(targetID).setValue(targetUser); //update user in DB
-
-                            //add user access to list and update Userscount
-                            final DatabaseReference listRef = FirebaseDatabase.getInstance().getReference("todo-lists").child(listKey);
+                            final DatabaseReference listRef = ref.child("shared").child(targetID).child(listKey);
 
                             //Listen for the orginal list a single time
                             listRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     //Get the original list
-                                    ListItem orginalList = dataSnapshot.getValue(ListItem.class);
-                                    //If the User already exists then make a toast saying
-                                    if (orginalList.access.keySet().contains(targetID)) {
+
+                                    if (dataSnapshot.getValue() != null) {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 Toast.makeText(context, "User Already has access.", Toast.LENGTH_SHORT).show(); //if it gets here without finish() being called
                                             }
                                         });
+                                    }  else {
 
-                                    } else {
-                                        listRef.runTransaction(new Transaction.Handler() {
+                                        ref.child("todo-lists").child(listKey).child("usersCount").addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
-                                            public Transaction.Result doTransaction(MutableData mutableData) {
-                                                ListItem updatedList = mutableData.getValue(ListItem.class);
-
-                                                //List Item is null means it doesn't exist
-                                                if (updatedList == null) {
-                                                    return Transaction.success(mutableData);
-                                                }
-
-                                                //If the user already has access
-                                                if (updatedList.access.keySet().contains(targetID)) {
-                                                    return Transaction.success(mutableData);
-                                                }
-
-                                                updatedList.usersCount++; //increment usersCount
-                                                updatedList.access.put(targetID, true);
-
-
-                                                //add to shared lists
-                                                DatabaseReference sharedLists = FirebaseDatabase.getInstance().getReference("shared-Lists");
-                                                sharedLists.child(targetID).child(listKey).setValue(updatedList);
-
-                                                //Remove users key from keyset
-                                                Set<String> usersKeySet = updatedList.access.keySet();
-                                                usersKeySet.remove(updatedList.uid);
-
-                                                //Update the rest of the shared-accounts
-                                                for (String userKey : usersKeySet) {
-                                                    sharedLists.child(userKey).child(listKey).setValue(updatedList);
-                                                }
-
-                                                //update the owners user-lists
-                                                DatabaseReference ownerUserRef = FirebaseDatabase.getInstance().getReference("user-lists").child(updatedList.uid);
-                                                ownerUserRef.child(listKey).setValue(updatedList);
-
-                                                //Add listID -> access -> targetID: true and report success
-                                                mutableData.setValue(updatedList);
-                                                return Transaction.success(mutableData);
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                int a = dataSnapshot.getValue(int.class) + 1;
+                                                ref.child("todo-lists").child(listKey).child("usersCount").setValue(a);
+                                                listRef.setValue(true);
                                             }
 
                                             @Override
-                                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                                                //transaction completed
-                                                Log.i("Updated List: ", dataSnapshot.toString());
-                                                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+                                            public void onCancelled(DatabaseError databaseError) {
 
-                                                //If there was an error allow the user to keep trying.
-                                                if (b) {
-                                                    finish();
-                                                } else {
-                                                    setEditingEnabled(true);
-                                                }
                                             }
-
-
                                         });
 
                                     }

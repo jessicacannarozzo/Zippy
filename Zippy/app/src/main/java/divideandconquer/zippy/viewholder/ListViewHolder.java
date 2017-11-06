@@ -11,6 +11,7 @@ import android.widget.TextView;
 import divideandconquer.zippy.R;
 
 
+import divideandconquer.zippy.fragment.ShoppingListFragment;
 import divideandconquer.zippy.models.ListItem;
 
 public class ListViewHolder extends RecyclerView.ViewHolder {
@@ -29,6 +30,7 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
         numSharesView = itemView.findViewById(R.id.list_num_of_users);
         photoView = itemView.findViewById(R.id.list_author_photo);
     }
+
 
     public void bindToListItem(ListItem listItem) {
         nameView.setText(listItem.listName);

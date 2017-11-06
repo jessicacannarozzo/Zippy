@@ -70,6 +70,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+                GroceryItem newItem = dataSnapshot.getValue(GroceryItem.class);
+                removeGroceryItem(newItem, dataSnapshot.getKey());
             }
 
             @Override
@@ -81,6 +83,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+
             }
 
         };
@@ -100,6 +103,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
     @Override
     public void onBindViewHolder(final GroceryListActivity.GroceryItemViewHolder viewHolder, int position) {
         //position of grocery item in array
+        Log.d("test", String.valueOf(position));
         GroceryItem groceryItem = mGroceryItems.get(position);
         String mGroceryItemId = mGroceryItemIds.get(position);
 
