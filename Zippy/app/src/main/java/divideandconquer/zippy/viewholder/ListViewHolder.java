@@ -19,6 +19,7 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
     public TextView nameView;
     public ImageView sharedView;
     public TextView numSharesView;
+    public ImageView photoView;
 
     public ListViewHolder(View itemView) {
         super(itemView);
@@ -26,10 +27,11 @@ public class ListViewHolder extends RecyclerView.ViewHolder {
         nameView = itemView.findViewById(R.id.list_name);
         sharedView = itemView.findViewById(R.id.shared);
         numSharesView = itemView.findViewById(R.id.list_num_of_users);
+        photoView = itemView.findViewById(R.id.list_author_photo);
     }
 
     public void bindToListItem(ListItem listItem) {
         nameView.setText(listItem.listName);
-        numSharesView.setText(String.valueOf(listItem.access.size()));
+        numSharesView.setText(String.valueOf(listItem.usersCount));
     }
 }

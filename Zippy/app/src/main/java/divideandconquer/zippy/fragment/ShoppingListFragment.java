@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +19,7 @@ import com.google.firebase.database.Query;
 
 import divideandconquer.zippy.GroceryListActivity;
 import divideandconquer.zippy.R;
+import divideandconquer.zippy.UserProfileColorService;
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.viewholder.ListViewHolder;
 
@@ -35,6 +37,7 @@ public abstract class ShoppingListFragment extends Fragment {
     private FirebaseRecyclerAdapter<ListItem, ListViewHolder> mAdapter;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
+    private TextDrawable.IBuilder cBuilder;
 
     public ShoppingListFragment() {}
 
@@ -51,6 +54,15 @@ public abstract class ShoppingListFragment extends Fragment {
         mRecycler = rootView.findViewById(R.id.list_of_lists);
         mRecycler.setHasFixedSize(true);
 
+        //Generate a icon builder for the photos
+        cBuilder = TextDrawable.builder()
+                .beginConfig()
+                .withBorder(0)
+                .toUpperCase()
+                .endConfig()
+                .round();
+
+
         return rootView;
     }
 
@@ -66,7 +78,6 @@ public abstract class ShoppingListFragment extends Fragment {
 
         // Set up FirebaseRecyclerAdapter with the Query
         Query postsQuery = getQuery(mDatabase);
-
 
 
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ListItem>()
@@ -87,6 +98,21 @@ public abstract class ShoppingListFragment extends Fragment {
                 final DatabaseReference listRef = getRef(position);
 
                 final String postKey = listRef.getKey();
+
+                //If the usersCount is less then one, the shared icon is replaced with the person icon
+                if (model.usersCount <= 1) {
+                    viewHolder.sharedView.setImageResource(R.drawable.ic_person_black_24dp);
+                } else {
+                    viewHolder.sharedView.setImageResource(R.drawable.ic_group_black_24dp);
+                }
+
+                //Generate an icon using the first letter of their username
+                String name = model.author.substring(0,1).toUpperCase();
+                if (name.length() == 1) {
+                    int color = UserProfileColorService.getInstance().getGenerator().getColor(model.uid);
+                    TextDrawable drawable = cBuilder.build(name, color);
+                    viewHolder.photoView.setImageDrawable(drawable);
+                }
 
                 // Set click listener for the whole list view
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
