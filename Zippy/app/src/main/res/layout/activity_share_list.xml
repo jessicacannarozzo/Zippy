@@ -27,4 +27,25 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_navigation_check_24"/>
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="64dp"
+        android:layout_below="@+id/targetEmail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Who has access"
+        android:textSize="18sp"
+        android:layout_below="@+id/targetEmail"
+        android:layout_alignLeft="@+id/targetEmail"
+        android:layout_alignStart="@+id/targetEmail"
+        android:layout_alignRight="@+id/targetEmail"
+        android:layout_alignEnd="@+id/targetEmail" />
+
 </RelativeLayout>
