@@ -10,7 +10,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/reset"
+        android:id="@+id/reset_list"
         android:title="Reset"
         android:visible="true"
         app:showAsAction="never" />
