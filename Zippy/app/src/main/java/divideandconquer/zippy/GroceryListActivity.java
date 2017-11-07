@@ -291,7 +291,8 @@ public class GroceryListActivity extends BaseActivity {
             }
         }
 
-        private void updateCheckBox(boolean checked) {
+        // not ideal to make this public, but useful for reset feature
+        public void updateCheckBox(boolean checked) {
 
             // we only need to update if the check box result on our app doesn't match the one on firebase
             if (this.groceryItem != null && this.groceryItem.checked != checked) {
@@ -346,7 +347,12 @@ public class GroceryListActivity extends BaseActivity {
             finish();
             return true;
 
-        } else {
+        } else if (i == R.id.reset_list){
+//           Log.i("RESET", "reset clicked!");
+            mAdapter.resetList();
+            return true;
+        }
+        else {
             return super.onOptionsItemSelected(item);
         }
     }
