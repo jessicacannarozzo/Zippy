@@ -1,1 +1,3 @@
 - .5h Reviewing Code
+- .5h Planning Unshare feature
+- 2h Researching List Fragments
