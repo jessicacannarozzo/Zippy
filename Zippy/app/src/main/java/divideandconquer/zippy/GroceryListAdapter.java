@@ -130,11 +130,13 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         mGroceryItemIds.remove(index);
         mGroceryItems.remove(index);
         notifyItemRemoved(index);
+
+        // remove item from viewHolders
+        viewHolders.remove(id);
+//        Log.i("viewholders-left", ""+viewHolders.size());
     }
 
     public void resetList(){
-//        Log.i("RESET", viewHolders.toString());
-
         for (GroceryListActivity.GroceryItemViewHolder value : viewHolders.values()) {
 //            Log.i("RESET-UI", value.toString()); // item key in UI
             value.updateCheckBox(false);
