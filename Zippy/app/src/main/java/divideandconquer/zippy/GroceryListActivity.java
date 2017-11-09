@@ -21,12 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
+import java.util.List;
 
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.GroceryItem;
@@ -60,8 +63,7 @@ public class GroceryListActivity extends BaseActivity {
 
         mTodoKey = getIntent().getStringExtra(EXTRA_POST_KEY);
         if (mTodoKey == null) {
-            throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
-        }
+         }
 
         // Initialize Database
         mGroceryListReference = FirebaseDatabase.getInstance().getReference()
@@ -101,9 +103,14 @@ public class GroceryListActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ListItem post = dataSnapshot.getValue(ListItem.class);
 
-                //set list title:
-                TextView title = (TextView) findViewById(R.id.list_name);
-                title.setText(post.listName);
+                if(post != null) {
+                    //set list title:
+                    TextView title = (TextView) findViewById(R.id.list_name);
+                    title.setText(post.listName);
+                } else {
+                    finish();
+                }
+
 
             }
 
@@ -330,10 +337,12 @@ public class GroceryListActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -351,9 +360,17 @@ public class GroceryListActivity extends BaseActivity {
 //           Log.i("RESET", "reset clicked!");
             mAdapter.resetList();
             return true;
+        } else if (i == R.id.delete_list) {
+            deleteList();
+            finish();
+            return true;
         }
         else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void deleteList() {
+        mGroceryListReference.removeValue();
     }
 }

@@ -80,63 +80,6 @@ public abstract class ShoppingListFragment extends Fragment {
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
-        /*
-        // Set up FirebaseRecyclerAdapter with the Query
-        Query postsQuery = getQuery(mDatabase);
-
-
-        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<ListItem>()
-                .setQuery(postsQuery, ListItem.class)
-                .build();
-
-
-        mAdapter = new FirebaseRecyclerAdapter<ListItem, ListViewHolder>(options) {
-
-            @Override
-            public ListViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-                return new ListViewHolder(inflater.inflate(R.layout.item_list, viewGroup, false));
-            }
-
-
-
-            protected void onBindViewHolder(ListViewHolder viewHolder, int position, final ListItem model) {
-                final DatabaseReference listRef = getRef(position);
-
-                final String postKey = listRef.getKey();
-
-                //If the usersCount is less then one, the shared icon is replaced with the person icon
-                if (model.usersCount <= 1) {
-                    viewHolder.sharedView.setImageResource(R.drawable.ic_person_black_24dp);
-                } else {
-                    viewHolder.sharedView.setImageResource(R.drawable.ic_group_black_24dp);
-                }
-
-                //Generate an icon using the first letter of their username
-                String name = model.author.substring(0,1).toUpperCase();
-                if (name.length() == 1) {
-                    int color = UserProfileColorService.getInstance().getGenerator().getColor(model.uid);
-                    TextDrawable drawable = cBuilder.build(name, color);
-                    viewHolder.photoView.setImageDrawable(drawable);
-                }
-
-                // Set click listener for the whole list view
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Launch PostDetailActivity
-                        Intent intent = new Intent(getActivity(), GroceryListActivity.class);
-                        intent.putExtra(GroceryListActivity.EXTRA_POST_KEY, postKey);
-
-                        startActivity(intent);
-                    }
-                });
-
-                viewHolder.bindToListItem(model);
-
-            }
-        };
-        */
         test = getAdapter(mDatabase);
         mRecycler.setAdapter(test);
     }

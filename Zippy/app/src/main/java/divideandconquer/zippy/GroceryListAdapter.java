@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,12 +82,15 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
+                GroceryItem movedItem = dataSnapshot.getValue(GroceryItem.class);
+                String groceryKey = dataSnapshot.getKey();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+                Toast.makeText(mContext, "Failed to load comments.",
+                        Toast.LENGTH_SHORT).show();
 
             }
 
