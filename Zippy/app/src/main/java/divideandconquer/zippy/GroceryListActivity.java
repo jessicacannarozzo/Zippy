@@ -50,6 +50,8 @@ public class GroceryListActivity extends BaseActivity {
     private DatabaseReference mGroceryItemReference;
     private ValueEventListener mTodoListener;
     private GroceryListAdapter mAdapter;
+
+    //Do not use this field for data that must be accurate
     private ListItem listItem;
     //UI Fields
     private TextView mGroceryItemField;
@@ -106,6 +108,8 @@ public class GroceryListActivity extends BaseActivity {
                     //set list title:
                     TextView title = (TextView) findViewById(R.id.list_name);
                     title.setText(post.listName);
+
+                    //Update the post and update the menu options
                     listItem = post;
                     invalidateOptionsMenu();
                 } else {
@@ -340,6 +344,7 @@ public class GroceryListActivity extends BaseActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
+        //Dont show the menu item if it's not owned by the user
         if (listItem.uid.equals(FirebaseAuth.getInstance().getUid())) {
             menu.findItem(R.id.delete_list).setVisible(true);
         } else {
