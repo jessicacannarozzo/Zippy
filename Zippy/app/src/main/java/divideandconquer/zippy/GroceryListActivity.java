@@ -50,7 +50,7 @@ public class GroceryListActivity extends BaseActivity {
     private DatabaseReference mGroceryItemReference;
     private ValueEventListener mTodoListener;
     private GroceryListAdapter mAdapter;
-
+    private ListItem listItem;
     //UI Fields
     private TextView mGroceryItemField;
     private Button mNewGroceryItemButton;
@@ -102,11 +102,12 @@ public class GroceryListActivity extends BaseActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ListItem post = dataSnapshot.getValue(ListItem.class);
-
                 if(post != null) {
                     //set list title:
                     TextView title = (TextView) findViewById(R.id.list_name);
                     title.setText(post.listName);
+                    listItem = post;
+                    invalidateOptionsMenu();
                 } else {
                     finish();
                 }
@@ -338,9 +339,22 @@ public class GroceryListActivity extends BaseActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (listItem.uid.equals(FirebaseAuth.getInstance().getUid())) {
+            menu.findItem(R.id.delete_list).setVisible(true);
+        } else {
+            menu.findItem(R.id.delete_list).setVisible(false);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
+
 
 
 
