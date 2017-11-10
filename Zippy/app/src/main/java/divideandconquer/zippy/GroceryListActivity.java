@@ -26,6 +26,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -390,6 +392,42 @@ public class GroceryListActivity extends BaseActivity {
     }
 
     public void deleteList() {
-        mGroceryListReference.removeValue();
+
+        //Run transaction to delete the list from all areas
+        mGroceryListReference.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                ListItem updatedList = mutableData.getValue(ListItem.class);
+
+                if (updatedList == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                //Get database references
+                DatabaseReference sharedLists = FirebaseDatabase.getInstance().getReference("shared");
+                DatabaseReference ownedLists = FirebaseDatabase.getInstance().getReference("owned");
+
+                //Delete access for the shared keys
+                for (String userKey : updatedList.access.keySet()) {
+                    sharedLists.child(userKey).child(mTodoKey).removeValue();
+                }
+
+                //Delete the owner from owned table
+                ownedLists.child(updatedList.uid).child(mTodoKey).removeValue();
+
+                mutableData.setValue(updatedList);
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                Log.i("Deleted List: ", dataSnapshot.toString());
+                Log.d(TAG, "groceryList:onComplete:" + databaseError);
+
+            }
+        });
+
+       mGroceryListReference.removeValue();
     }
 }
