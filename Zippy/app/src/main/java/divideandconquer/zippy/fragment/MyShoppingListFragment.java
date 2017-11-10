@@ -1,5 +1,8 @@
 package divideandconquer.zippy.fragment;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -7,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import divideandconquer.zippy.models.GroceryItem;
 import divideandconquer.zippy.models.ListItem;
 
 /**
@@ -39,20 +43,48 @@ public class MyShoppingListFragment extends ShoppingListFragment {
                             @Override
                             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+
+                                ListItem newList = dataSnapshot.getValue(ListItem.class);
+                                String listItemKey = dataSnapshot.getKey();
+
+                                // [START_EXCLUDE]
+                                int listIndex = mGroceryItemIds.indexOf(listItemKey);
+                                if (listIndex > -1) {
+                                    // Replace with the new data
+                                    mGroceryItems.set(listIndex, newList);
+
+                                    // Update the RecyclerView
+                                    notifyItemChanged(listIndex);
+                                }
+
                             }
 
                             @Override
                             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                String listItemKey = dataSnapshot.getKey();
+                                Log.d("onChildRemoved", listItemKey);
+
+                                // [START_EXCLUDE]
+                                int listIndex = mGroceryItemIds.indexOf(listItemKey);
+                                if (listIndex > -1) {
+                                    // Remove data from the list
+                                    mGroceryItemIds.remove(listItemKey);
+                                    mGroceryItems.remove(listIndex);
+
+                                    // Update the RecyclerView
+                                    notifyItemRemoved(listIndex);
+                                }
 
                             }
 
                             @Override
                             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                             }
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
+                                Toast.makeText(getContext(), "Failed to Lists.",
+                                        Toast.LENGTH_SHORT).show();
 
                             }
                         });
@@ -65,21 +97,16 @@ public class MyShoppingListFragment extends ShoppingListFragment {
 
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        mAllListsReference.child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                ListItem item = dataSnapshot.getValue(ListItem.class);
-                                int index = mGroceryItemIds.indexOf(dataSnapshot.getKey());
-                                mGroceryItemIds.remove(index);
-                                mGroceryItems.remove(index);
-                                notifyItemRemoved(index);
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                        int listIndex = mGroceryItemIds.indexOf(dataSnapshot.getKey());
+                        if (listIndex > -1) {
+                            // Remove data from the list
+                            mGroceryItemIds.remove(listIndex);
+                            mGroceryItems.remove(listIndex);
+                            // Update the RecyclerView
+                            notifyItemRemoved(listIndex);
+                        }
 
-                            }
-                        });
                     }
 
                     @Override
