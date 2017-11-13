@@ -1,0 +1,9 @@
+Week 7
+
+- Fixed user count bug 1 hr
+- 3h Group Meetings
+  - 1.5h Monday
+	- 1h Wednesday 
+	- .5h Friday
+
+Total 5hrs
