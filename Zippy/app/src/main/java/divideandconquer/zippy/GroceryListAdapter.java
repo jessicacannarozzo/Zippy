@@ -6,14 +6,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import divideandconquer.zippy.models.GroceryItem;
 import divideandconquer.zippy.models.ListItem;
@@ -31,6 +35,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
 
     private List<String> mGroceryItemIds = new ArrayList<>();
     private List<GroceryItem> mGroceryItems = new ArrayList<>();
+    private Map<String, GroceryListActivity.GroceryItemViewHolder> viewHolders = new HashMap<>();
 
     public GroceryListAdapter(final Context context, DatabaseReference ref) {
         mContext = context;
@@ -77,12 +82,15 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
+                GroceryItem movedItem = dataSnapshot.getValue(GroceryItem.class);
+                String groceryKey = dataSnapshot.getKey();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+                Toast.makeText(mContext, "Failed to load comments.",
+                        Toast.LENGTH_SHORT).show();
 
             }
 
@@ -103,11 +111,14 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
     @Override
     public void onBindViewHolder(final GroceryListActivity.GroceryItemViewHolder viewHolder, int position) {
         //position of grocery item in array
-        Log.d("test", String.valueOf(position));
+//        Log.d("onBindViewHolder-pos", String.valueOf(position));
         GroceryItem groceryItem = mGroceryItems.get(position);
         String mGroceryItemId = mGroceryItemIds.get(position);
 
         viewHolder.setGroceryItem(groceryItem, mGroceryItemId, mDatabaseReference);
+
+        // add viewHolders reference as they are created
+        viewHolders.put(mGroceryItemId,viewHolder);
     }
 
     @Override
@@ -124,5 +135,16 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
         mGroceryItemIds.remove(index);
         mGroceryItems.remove(index);
         notifyItemRemoved(index);
+
+        // remove item from viewHolders
+        viewHolders.remove(id);
+//        Log.i("viewholders-left", ""+viewHolders.size());
+    }
+
+    public void resetList(){
+        for (GroceryListActivity.GroceryItemViewHolder value : viewHolders.values()) {
+//            Log.i("RESET-UI", value.toString()); // item key in UI
+            value.updateCheckBox(false);
+        }
     }
 }

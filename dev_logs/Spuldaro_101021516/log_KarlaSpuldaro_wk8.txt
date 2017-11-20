@@ -1,0 +1,7 @@
+Week 8 Duties:
+
+- Worked on reset feature + bug fix: 3h
+- Update GitHub issues + milestones + adding new tasks + code review: 0.5h
+- Team meeting: 1.5h
+
+Total: 5h

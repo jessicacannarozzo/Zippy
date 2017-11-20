@@ -8,4 +8,16 @@
         android:title="Share"
         android:visible="true"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/reset_list"
+        android:title="Reset"
+        android:visible="true"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/delete_list"
+        android:title="Delete"
+        android:visible="true"
+        app:showAsAction="never" />
 </menu>
