@@ -12,6 +12,7 @@ public class ListItem {
     public String uid;
     public String author;
     public String listName;
+    public Map<String,Boolean> access = new HashMap<>();
     public int usersCount = 1;
 
     public ListItem() {
@@ -21,6 +22,7 @@ public class ListItem {
         this.uid = uid;
         this.author = author;
         this.listName = listName;
+        this.access  = access;
     }
 
     @Exclude
@@ -30,6 +32,7 @@ public class ListItem {
         result.put("author", author);
         result.put("listName", listName);
         result.put("usersCount", usersCount);
+        result.put("access", access);
         return result;
     }
 

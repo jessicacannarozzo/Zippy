@@ -133,20 +133,46 @@ public class ShareListActivity extends BaseActivity {
                                         });
                                     }  else {
 
-                                        ref.child("todo-lists").child(listKey).child("usersCount").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        ref.child("todo-lists").child(listKey).runTransaction(new Transaction.Handler() {
                                             @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                int a = dataSnapshot.getValue(int.class) + 1;
-                                                ref.child("todo-lists").child(listKey).child("usersCount").setValue(a);
+                                            public Transaction.Result doTransaction(MutableData mutableData) {
+                                                ListItem updatedList = mutableData.getValue(ListItem.class);
+
+                                                //List Item is null means it doesn't exist
+                                                if (updatedList == null) {
+                                                    return Transaction.success(mutableData);
+                                                }
+
+                                                updatedList.usersCount++; //increment usersCount
+                                                updatedList.access.put(targetID, true);
+
                                                 listRef.setValue(true);
+
+                                                //Add listID -> access -> targetID: true and report success
+                                                mutableData.setValue(updatedList);
+                                                return Transaction.success(mutableData);
                                             }
 
                                             @Override
-                                            public void onCancelled(DatabaseError databaseError) {
+                                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                                //transaction completed
+                                                Log.i("Updated List: ", dataSnapshot.toString());
+                                                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+
+                                                finish();
+                                                setEditingEnabled(true);
 
                                             }
+
+
                                         });
 
+
+
+
+
+
+//
                                     }
                                 }
                                 @Override
