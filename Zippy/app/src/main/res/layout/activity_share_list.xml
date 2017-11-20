@@ -35,10 +35,10 @@
         android:text="Who has access"
         android:textSize="18sp"
         android:layout_below="@+id/targetEmail"
-        android:layout_alignLeft="@+id/targetEmail"
-        android:layout_alignStart="@+id/targetEmail"
-        android:layout_alignRight="@+id/targetEmail"
-        android:layout_alignEnd="@+id/targetEmail" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,6 +47,19 @@
         android:layout_marginTop="19dp"
         android:orientation="horizontal"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"></LinearLayout>
+        android:layout_alignParentStart="true">
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="divideandconquer.zippy.fragment.AccessListFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/title"
+        android:layout_weight="1"
+        tools:layout="@layout/access_list_fragment" />
 
 </RelativeLayout>
