@@ -1,10 +1,9 @@
-package divideandconquer.zippy.fragment;
+package divideandconquer.zippy.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import divideandconquer.zippy.R;
 import divideandconquer.zippy.fragment.SharedUsersFragment.OnListFragmentInteractionListener;
@@ -19,7 +18,6 @@ import java.util.List;
  */
 public class SharedUsersRecyclerViewAdapter extends RecyclerView.Adapter<SharedUsersRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
     public SharedUsersRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
@@ -59,9 +57,6 @@ public class SharedUsersRecyclerViewAdapter extends RecyclerView.Adapter<SharedU
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-//        public final TextView mIdView;
-//        public final TextView mContentView;
-        public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);

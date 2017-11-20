@@ -11,10 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import divideandconquer.zippy.R;
-import divideandconquer.zippy.fragment.dummy.DummyContent;
-import divideandconquer.zippy.fragment.dummy.DummyContent.DummyItem;
-
-import java.util.List;
+import divideandconquer.zippy.viewholder.SharedUsersRecyclerViewAdapter;
 
 /**
  * A fragment representing a list of Items.
@@ -59,20 +56,8 @@ public class SharedUsersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sharedusers_list, container, false);
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new SharedUsersRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
-        return view;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.activity_share_list, container, false);
     }
 
 
