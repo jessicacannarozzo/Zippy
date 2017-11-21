@@ -1,2 +1,4 @@
 - .5h Reviewing code
+- 2h on displaying Access
 
+Total: 2.5h
