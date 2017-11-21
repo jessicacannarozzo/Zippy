@@ -25,6 +25,6 @@ public class AccessListFragment extends Fragment {
     }
 
     private void getUsers() {
-        private DatabaseReference userList = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference userList = FirebaseDatabase.getInstance().getReference("todo-lists");
     }
 }
