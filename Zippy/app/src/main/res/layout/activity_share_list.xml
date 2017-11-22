@@ -52,7 +52,7 @@
     </LinearLayout>
 
     <fragment
-        android:id="@+id/fragment"
+        android:id="@+id/fragment_access"
         android:name="divideandconquer.zippy.fragment.AccessListFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

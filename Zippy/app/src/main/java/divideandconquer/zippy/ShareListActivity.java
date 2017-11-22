@@ -23,11 +23,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import divideandconquer.zippy.fragment.AccessListFragment;
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.User;
 
@@ -57,6 +53,9 @@ public class ShareListActivity extends BaseActivity {
         if (listKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
         }
+
+        AccessListFragment temp = (AccessListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_access);
+        temp.set_list(listKey);
 
         mSubmitButton = findViewById(R.id.fab_submit_share_list);
 
@@ -163,22 +162,12 @@ public class ShareListActivity extends BaseActivity {
                                                 setEditingEnabled(true);
 
                                             }
-
-
                                         });
-
-
-
-
-
-
-//
                                     }
                                 }
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
                                     Log.d(TAG, "listRef.addListenerForSingleValueEvent:onCancelled:" + databaseError);
-
                                 }
                             });
 
