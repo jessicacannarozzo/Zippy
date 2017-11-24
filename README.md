@@ -15,6 +15,11 @@ D2
 D3
 	- Doc link: https://docs.google.com/document/d/1HcQ8eIHmLOpm0SYJJfkKCoYBCAljLVWR7FkI0nMeTq8/edit?usp=sharing
 	- Class diagram: https://docs.google.com/document/d/1leSE7IvB3ksbSvdEodFysYQFiuScPPtxrxSj847gvMs/edit?usp=sharing
+	- Slides: https://docs.google.com/presentation/d/1YEqh0Orkad9EIClS1eK3kFv65g1Hdj6SjsmjV244p84/edit?usp=sharing
+	
+	
+D4
+	- Doc link: https://docs.google.com/document/d/15rFAAKoi_sMz09SH-bs-a5ppFnwNsd_n3He4NpGXMZc/edit?usp=sharing
 
 Scrum logs: https://docs.google.com/spreadsheets/d/1t9AD2L1M9IHWb8U-vO7NXHJ3fYKkEyy5E_wZalUA3zE/edit#gid=0
 
