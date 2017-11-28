@@ -1,0 +1,3 @@
+Week 5 Duties:
+- Group meeting (design specifics): 1.5h
+- set up the listener for CheckBox OnChange() with jess: 6.0h
