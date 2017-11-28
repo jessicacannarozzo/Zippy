@@ -133,6 +133,7 @@ public class ShareListActivity extends BaseActivity {
                                             }
                                         });
 
+
                                         //unsharing
                                         ref.child("todo-lists").child(listKey).runTransaction(new Transaction.Handler() {
                                             @Override
