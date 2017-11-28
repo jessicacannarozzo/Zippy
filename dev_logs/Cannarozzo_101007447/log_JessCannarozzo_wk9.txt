@@ -1,0 +1,7 @@
+- 1.5h Group meeting to discuss plans for D3.
+- 3h working on D3:
+	- singleton design pattern
+	- personal dev log discussion
+	- editing document
+
+- Total: 4.5h
