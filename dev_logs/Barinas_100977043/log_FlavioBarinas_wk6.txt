@@ -1,0 +1,4 @@
+Week 1 Duties:
+  - Team Meeting: 3h
+  - Worked on D2 3H
+  - Working on restruchering the DB 4H
