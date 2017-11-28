@@ -128,7 +128,40 @@ public class ShareListActivity extends BaseActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Toast.makeText(context, "User Already has access.", Toast.LENGTH_SHORT).show(); //if it gets here without finish() being called
+//                                                Toast.makeText(context, "User Already has access.", Toast.LENGTH_SHORT).show(); //if it gets here without finish() being called
+                                        Toast.makeText(context, "Unsharing...", Toast.LENGTH_SHORT).show(); //if it gets here without finish() being called
+                                            }
+                                        });
+
+                                        //unsharing
+                                        ref.child("todo-lists").child(listKey).runTransaction(new Transaction.Handler() {
+                                            @Override
+                                            public Transaction.Result doTransaction(MutableData mutableData) {
+                                                ListItem updatedList = mutableData.getValue(ListItem.class);
+
+                                                //List Item is null means it doesn't exist
+                                                if (updatedList == null) {
+                                                    return Transaction.success(mutableData);
+                                                }
+
+                                                updatedList.usersCount--; //increment usersCount
+                                                updatedList.access.remove(targetID); //remove target person from access list
+
+                                                listRef.removeValue();
+
+                                                //Add listID -> access -> targetID: true and report success
+                                                mutableData.setValue(updatedList);
+                                                return Transaction.success(mutableData);
+                                            }
+
+                                            @Override
+                                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                                //transaction completed
+                                                Log.i("Updated List: ", dataSnapshot.toString());
+                                                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+
+                                                finish();
+                                                setEditingEnabled(true);
                                             }
                                         });
                                     }  else {
@@ -166,13 +199,6 @@ public class ShareListActivity extends BaseActivity {
 
 
                                         });
-
-
-
-
-
-
-//
                                     }
                                 }
                                 @Override
