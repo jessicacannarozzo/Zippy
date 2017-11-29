@@ -128,7 +128,7 @@ public class GroceryListActivity extends BaseActivity {
                 // [END_EXCLUDE]
             }
         };
-8        // [END post_value_event_listener]
+        // [END post_value_event_listener]
 
         // Keep copy of todoAdapter listener so we can remove it when app stops
         mTodoListener = todoListener;
