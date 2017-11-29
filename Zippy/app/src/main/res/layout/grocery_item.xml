@@ -17,6 +17,13 @@
         android:layout_height="wrap_content"
         android:checked="false" />
 
+    <ImageView
+        android:id="@+id/thumbs_down"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:clickable="true" />
+
     <TextView
         android:id="@+id/todo_item_name"
         style="@style/Base.TextAppearance.AppCompat.Small"

@@ -13,7 +13,7 @@ public class GroceryItem {
     public String uid;
     public String author;
     public String item;
-    public Boolean checked = false;
+    public int state = 0; //0= unchecked, 1= checked, 2= not found (out of stock)
 
     public Date timechecked;
 
@@ -30,8 +30,8 @@ public class GroceryItem {
         this.timechecked = timechecked;
     }
 
-    public void setChecked(Boolean checked) {
-        this.checked = checked;
+    public void setChecked(int state) {
+        this.state = state;
     }
 
     @Exclude
@@ -40,7 +40,7 @@ public class GroceryItem {
         result.put("uid", uid);
         result.put("author", author);
         result.put("item", item);
-        result.put("checked", checked);
+        result.put("state", state);
 
         return result;
     }
