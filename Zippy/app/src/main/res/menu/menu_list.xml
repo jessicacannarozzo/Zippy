@@ -20,4 +20,11 @@
         android:title="Delete"
         android:visible="true"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/game_mode"
+        android:title="Game Mode"
+        android:visible="true"
+        app:showAsAction="never" />
 </menu>
+

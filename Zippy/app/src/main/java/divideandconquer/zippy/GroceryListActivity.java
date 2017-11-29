@@ -1,7 +1,6 @@
 package divideandconquer.zippy;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,8 +26,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -131,8 +128,7 @@ public class GroceryListActivity extends BaseActivity {
                 // [END_EXCLUDE]
             }
         };
-        mGroceryListReference.addValueEventListener(todoListener);
-        // [END post_value_event_listener]
+8        // [END post_value_event_listener]
 
         // Keep copy of todoAdapter listener so we can remove it when app stops
         mTodoListener = todoListener;
@@ -186,7 +182,6 @@ public class GroceryListActivity extends BaseActivity {
 
         // these should all be private
         private CheckBox checkboxView;
-        private ImageView thumbsDownView;
         private ImageView photoView;
         private TextView itemNameView;
         private EditText editItemNameView;
@@ -201,12 +196,6 @@ public class GroceryListActivity extends BaseActivity {
             super(itemView);
 
             checkboxView = itemView.findViewById(R.id.todo_checkbox);
-            thumbsDownView = itemView.findViewById(R.id.thumbs_down);
-
-            //Set thumbs down image
-            TextDrawable thumbsDown = TextDrawable.builder()
-                    .buildRect("\uD83D\uDC4E", Color.TRANSPARENT);
-            this.thumbsDownView.setImageDrawable(thumbsDown);
 
             // itemNameView and editItemNameView are different states of the same item text instance, necessary for switching between view/edit
             itemNameView = itemView.findViewById(R.id.todo_item_name);
@@ -214,49 +203,14 @@ public class GroceryListActivity extends BaseActivity {
             mRemoveGroceryItemButton = itemView.findViewById(R.id.button_todo_rem_item);
             photoView = itemView.findViewById(R.id.todo_author_photo);
 
-
-            // checkbox click cycle:
-            // unchecked -> checked -> thumbs down -> unchecked...
-
             //on checkbox checked:
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    boolean changed = false;
                     if (groceryItem != null) {
-                        if (groceryItem.state == 0 && isChecked) {
-                            groceryItem.state = 1;
-                            changed = true;
-                        } else if (groceryItem.state == 1 && !isChecked) {
-                            groceryItem.state = 2;
-                            checkboxView.setVisibility(View.GONE);
-                            thumbsDownView.setVisibility(View.VISIBLE);
-                            changed = true;
-                        }
-                    }
-
-                    Log.i("STATE","Check-box clicked. State: "+ groceryItem.state);
-
-                    if (changed) {
+                        groceryItem.checked = isChecked;
+                        //Log.i("CHECKBOX","Item: "+ groceryItem.item + " " + String.valueOf(mDatabaseReference.getKey()));
                         mDatabaseReference.child(groceryItemId).setValue(groceryItem);
                     }
-                }
-            });
-
-            //on item clicked for edition:
-            thumbsDownView.setOnClickListener(new android.view.View.OnClickListener(){
-
-                @Override
-                public void onClick(View v) {
-//                    Log.d("thumbs-dwn-CLICK","state: "+ this.groceryItem.state);
-
-                // when user clicks on an item, we make the editing box visible, and hide the textview
-                thumbsDownView.setVisibility(View.GONE);
-                checkboxView.setChecked(false);
-                checkboxView.setVisibility(View.VISIBLE);
-
-                groceryItem.state = 0;
-                mDatabaseReference.child(groceryItemId).setValue(groceryItem);
-                Log.i("STATE","thumbs-down clicked. State: "+ groceryItem.state);
                 }
             });
 
@@ -324,19 +278,10 @@ public class GroceryListActivity extends BaseActivity {
 
             String newText = this.editItemNameView.getText().toString();
 
-            if (!newText.isEmpty()) {
+            if (!newText.isEmpty()){
                 // and update the text view with whatever the user typed before
                 updateText(newText);
-
-                if (this.checkboxView.getVisibility() == View.VISIBLE) {
-                    if (!this.checkboxView.isChecked()) {
-                        updateCheckBox(0);
-                    } else {
-                        updateCheckBox(1);
-                    }
-                } else {
-                    updateCheckBox(2);
-                }
+                updateCheckBox(this.checkboxView.isChecked());
             }
             else{
                 // if the string is empty, we remove the item from the list
@@ -358,69 +303,26 @@ public class GroceryListActivity extends BaseActivity {
         }
 
         // not ideal to make this public, but useful for reset feature
-        public void updateCheckBox(int state) {
-            // states: 0= unchecked, 1= checked, 2= not found (out of stock)
+        public void updateCheckBox(boolean checked) {
 
             // we only need to update if the check box result on our app doesn't match the one on firebase
-            if (this.groceryItem != null && this.groceryItem.state != state) {
-                this.groceryItem.state = state;
-
-                switch(state){
-                    case 0:
-                        this.thumbsDownView.setVisibility(View.GONE);
-                        this.checkboxView.setVisibility(View.VISIBLE);
-                        this.checkboxView.setChecked(false);
-                        break;
-
-                    case 1:
-                        this.thumbsDownView.setVisibility(View.GONE);
-                        this.checkboxView.setVisibility(View.VISIBLE);
-                        this.checkboxView.setChecked(true);
-                        break;
-
-                    default: //case 2 = out of stock
-                        this.checkboxView.setVisibility(View.GONE);
-                        this.thumbsDownView.setVisibility(View.VISIBLE);
-
-//                        //Set thumbs down image
-//                        TextDrawable thumbsDown = TextDrawable.builder()
-//                                .buildRect("\uE421", Color.WHITE);
-//                        this.thumbsDownView.setImageDrawable(thumbsDown);
-                        break;
-                }
+            if (this.groceryItem != null && this.groceryItem.checked != checked) {
+                this.groceryItem.checked = checked;
+                this.checkboxView.setChecked(checked);
 
                 mDatabaseReference.child(groceryItemId).setValue(groceryItem);
             }
         }
 
+        // Refactor: grouped all attributes of an item here
         //refer to GroceryListAdapter.java > onBindViewHolder to see where we receive item
         public void setGroceryItem(GroceryItem item, String id, DatabaseReference ref) {
             this.mDatabaseReference = ref;
             groceryItem = item;
             groceryItemId = id;
             this.itemNameView.setText(item.item);
-            //this.checkboxView.setChecked(item.state);
+            this.checkboxView.setChecked(item.checked);
             this.editItemNameView.setText(item.item);
-
-            switch(item.state){
-                case 0:
-                    this.thumbsDownView.setVisibility(View.GONE);
-                    this.checkboxView.setVisibility(View.VISIBLE);
-                    this.checkboxView.setChecked(false);
-                    break;
-
-                case 1:
-                    this.thumbsDownView.setVisibility(View.GONE);
-                    this.checkboxView.setVisibility(View.VISIBLE);
-                    this.checkboxView.setChecked(true);
-                    break;
-
-                default: //case 2 = out of stock
-                    this.checkboxView.setVisibility(View.GONE);
-                    this.thumbsDownView.setVisibility(View.VISIBLE);
-
-                    break;
-            }
 
             //Set the profile image
             String name = this.groceryItem.author.substring(0,1).toUpperCase();
@@ -480,49 +382,22 @@ public class GroceryListActivity extends BaseActivity {
             deleteList();
             finish();
             return true;
-        }
-        else {
+        } else if (i == R.id.game_mode) {
+            Intent intent = new Intent(this, GameModeActivity.class);
+            intent.putExtra(GroceryListActivity.EXTRA_POST_KEY, getIntent().getStringExtra(EXTRA_POST_KEY));
+            startActivity(intent);
+
+            finish();
+            return true;
+
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
     public void deleteList() {
-
-        //Run transaction to delete the list from all areas
-        mGroceryListReference.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                ListItem updatedList = mutableData.getValue(ListItem.class);
-
-                if (updatedList == null) {
-                    return Transaction.success(mutableData);
-                }
-
-                //Get database references
-                DatabaseReference sharedLists = FirebaseDatabase.getInstance().getReference("shared");
-                DatabaseReference ownedLists = FirebaseDatabase.getInstance().getReference("owned");
-
-                //Delete access for the shared keys
-                for (String userKey : updatedList.access.keySet()) {
-                    sharedLists.child(userKey).child(mTodoKey).removeValue();
-                }
-
-                //Delete the owner from owned table
-                ownedLists.child(updatedList.uid).child(mTodoKey).removeValue();
-
-                mutableData.setValue(updatedList);
-
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                Log.i("Deleted List: ", dataSnapshot.toString());
-                Log.d(TAG, "groceryList:onComplete:" + databaseError);
-
-            }
-        });
-
-       mGroceryListReference.removeValue();
+        FirebaseDatabase.getInstance().getReference()
+                .child("/owned/").child(listItem.uid).child(mTodoKey).removeValue();
+        mGroceryListReference.removeValue();
     }
 }
