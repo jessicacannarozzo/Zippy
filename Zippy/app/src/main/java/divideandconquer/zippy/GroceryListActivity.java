@@ -128,8 +128,7 @@ public class GroceryListActivity extends BaseActivity {
                 // [END_EXCLUDE]
             }
         };
-        mGroceryListReference.addValueEventListener(todoListener);
-        // [END post_value_event_listener]
+8        // [END post_value_event_listener]
 
         // Keep copy of todoAdapter listener so we can remove it when app stops
         mTodoListener = todoListener;
@@ -383,13 +382,22 @@ public class GroceryListActivity extends BaseActivity {
             deleteList();
             finish();
             return true;
-        }
-        else {
+        } else if (i == R.id.game_mode) {
+            Intent intent = new Intent(this, GameModeActivity.class);
+            intent.putExtra(GroceryListActivity.EXTRA_POST_KEY, getIntent().getStringExtra(EXTRA_POST_KEY));
+            startActivity(intent);
+
+            finish();
+            return true;
+
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
     public void deleteList() {
+        FirebaseDatabase.getInstance().getReference()
+                .child("/owned/").child(listItem.uid).child(mTodoKey).removeValue();
         mGroceryListReference.removeValue();
     }
 }

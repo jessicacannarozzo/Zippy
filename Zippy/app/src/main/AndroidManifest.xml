@@ -24,6 +24,7 @@
         <activity android:name=".NewListActivity" />
         <activity android:name=".ShareListActivity" />
         <activity android:name=".GroceryListActivity" />
+        <activity android:name=".GameModeActivity" />
         <activity
             android:name=".SignInActivity"
             android:theme="@style/AppTheme2">
