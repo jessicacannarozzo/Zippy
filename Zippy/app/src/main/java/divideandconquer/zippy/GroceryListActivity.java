@@ -233,7 +233,10 @@ public class GroceryListActivity extends BaseActivity {
                     boolean changed = false;
                     boolean checkedOwnBox = false;
                     Integer originalState = groceryItem.state;
-                    String originalUid = groceryItem.checkedUid;
+                    String originalUid = null;
+                    if(groceryItem.checkedUid != null) {
+                        originalUid = groceryItem.checkedUid.toString();
+                    }
                     if (groceryItem != null) {
                         if (groceryItem.state == 0 && isChecked) {
                             groceryItem.state = 1;
@@ -252,6 +255,7 @@ public class GroceryListActivity extends BaseActivity {
 
                     if (changed) {
                         mDatabaseReference.child(groceryItemId).setValue(groceryItem);
+
                         updateGameScore(originalState, originalUid);
                     }
                 }
@@ -343,15 +347,20 @@ public class GroceryListActivity extends BaseActivity {
 
                     Map<String, Object> scores = (Map<String, Object>) dataSnapshot.getValue();
                     if (scores != null) {
-
                         Long myScore;
                         //If you check
                         if(originalState == 0 && groceryItem.state == 1) {
                             myScore = (Long) scores.get(groceryItem.checkedUid);
+                            if(myScore == null) {
+                                myScore = (long) 0;
+                            }
                             myScore++;
-                            scores.put(gi, myScore);
+                            scores.put(groceryItem.checkedUid, myScore);
                         } else if(originalState == 1 && groceryItem.state == 2) { //If you uncheck
                             myScore = (Long) scores.get(originalUid);
+                            if(myScore == null) {
+                                myScore = (long) 1;
+                            }
                             myScore--;
                             scores.put(originalUid, myScore);
                         }

@@ -83,8 +83,11 @@ public class GameModeActivity extends BaseActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final Game game = dataSnapshot.getValue(Game.class);
-                if(game == null || game.startTime == 0) {
+                if (game == null || game.startTime == 0) {
                     mStartButton.setText("START");
+                } else if(game.active == false) {
+                    mStartButton.setVisibility(View.INVISIBLE);
+                    mChrono.setText("COMPLETED");
                 } else {
 
                     DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
@@ -105,6 +108,9 @@ public class GameModeActivity extends BaseActivity {
                         }
                     });
 
+                }
+
+                if(game != null) {
                     final Map<String, Integer> scores = game.scores;
 
                     FirebaseDatabase.getInstance().getReference()
@@ -116,16 +122,10 @@ public class GameModeActivity extends BaseActivity {
                                 count += (long) x;
                             }
                             long childrenCount = dataSnapshot.getChildrenCount();
-                            if(childrenCount == count) {
+                            if(childrenCount == count && count != 0) {
                                 FirebaseDatabase.getInstance().getReference()
                                         .child("games").child(mGameDatabaseReference.getKey()).child("active").setValue(false);
-                                Log.i("STATE","EQUA: "+ childrenCount);
-
-
-
-
                             }
-
                         }
 
                         @Override
@@ -133,7 +133,6 @@ public class GameModeActivity extends BaseActivity {
 
                         }
                     });
-
                 }
 
 
