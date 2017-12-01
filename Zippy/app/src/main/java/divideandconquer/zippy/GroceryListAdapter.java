@@ -144,7 +144,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
     public void resetList(){
         for (GroceryListActivity.GroceryItemViewHolder value : viewHolders.values()) {
 //            Log.i("RESET-UI", value.toString()); // item key in UI
-            value.updateCheckBox(false);
+            value.updateCheckBox(0);
         }
     }
 }
