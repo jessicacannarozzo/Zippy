@@ -141,6 +141,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListActivity
 //        Log.i("viewholders-left", ""+viewHolders.size());
     }
 
+
     public void resetList(){
         for (GroceryListActivity.GroceryItemViewHolder value : viewHolders.values()) {
 //            Log.i("RESET-UI", value.toString()); // item key in UI

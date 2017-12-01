@@ -14,7 +14,7 @@ public class GroceryItem {
     public String author;
     public String item;
     public int state = 0; //0= unchecked, 1= checked, 2= not found (out of stock)
-
+    public String checkedUid;
     public Date timechecked;
 
     public GroceryItem() {
@@ -41,6 +41,7 @@ public class GroceryItem {
         result.put("author", author);
         result.put("item", item);
         result.put("state", state);
+        result.put("checkedUid", checkedUid);
 
         return result;
     }

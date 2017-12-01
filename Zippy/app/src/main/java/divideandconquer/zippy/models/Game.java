@@ -18,6 +18,8 @@ public class Game {
     public String uid;
     public Long startTime = (long) 0.0;
     public Boolean active = false;
+    public Map<String, Integer> scores = new HashMap<>();
+
 
     public Game() {
     }
@@ -32,8 +34,11 @@ public class Game {
         result.put("uid", uid);
         result.put("timeStamp", getStartTime());
         result.put("active", active);
+        result.put("scores", scores);
         return result;
     }
+
+
 
     public java.util.Map<String, String> getStartTime() {
         return ServerValue.TIMESTAMP;

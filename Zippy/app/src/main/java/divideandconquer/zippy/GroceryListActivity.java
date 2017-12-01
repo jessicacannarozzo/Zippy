@@ -32,8 +32,11 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import divideandconquer.zippy.models.Game;
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.GroceryItem;
 import divideandconquer.zippy.models.User;
@@ -50,7 +53,10 @@ public class GroceryListActivity extends BaseActivity {
 
     //Database reference
     private DatabaseReference mGroceryListReference;
+    private DatabaseReference mGameDatabaseReference;
     private DatabaseReference mGroceryItemReference;
+
+
     private ValueEventListener mTodoListener;
     private GroceryListAdapter mAdapter;
 
@@ -75,6 +81,9 @@ public class GroceryListActivity extends BaseActivity {
                 .child("/todo-lists/").child(mTodoKey);
         mGroceryItemReference = FirebaseDatabase.getInstance().getReference()
                 .child("todo-items").child(mTodoKey);
+        mGameDatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("games").child(mTodoKey);
+
 
         // getting UI components
         mGroceryItemField = findViewById(R.id.field_todo_item_text);
@@ -222,22 +231,28 @@ public class GroceryListActivity extends BaseActivity {
             checkboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     boolean changed = false;
+                    boolean checkedOwnBox = false;
+                    Integer originalState = groceryItem.state;
+                    String originalUid = groceryItem.checkedUid;
                     if (groceryItem != null) {
                         if (groceryItem.state == 0 && isChecked) {
                             groceryItem.state = 1;
                             changed = true;
                         } else if (groceryItem.state == 1 && !isChecked) {
                             groceryItem.state = 2;
+                            groceryItem.checkedUid = "";
                             checkboxView.setVisibility(View.GONE);
                             thumbsDownView.setVisibility(View.VISIBLE);
                             changed = true;
                         }
+                        groceryItem.checkedUid = FirebaseAuth.getInstance().getUid();
                     }
 
                     Log.i("STATE","Check-box clicked. State: "+ groceryItem.state);
 
                     if (changed) {
                         mDatabaseReference.child(groceryItemId).setValue(groceryItem);
+                        updateGameScore(originalState, originalUid);
                     }
                 }
             });
@@ -316,6 +331,84 @@ public class GroceryListActivity extends BaseActivity {
 
 
         }
+
+        private void updateGameScore(final Integer originalState, final String originalUid) {
+            final DatabaseReference mGameReference = FirebaseDatabase.getInstance().getReference()
+                    .child("games").child(mDatabaseReference.getKey()).child("scores");
+
+
+            mGameReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    Map<String, Object> scores = (Map<String, Object>) dataSnapshot.getValue();
+                    if (scores != null) {
+
+                        Long myScore;
+                        //If you check
+                        if(originalState == 0 && groceryItem.state == 1) {
+                            myScore = (Long) scores.get(groceryItem.checkedUid);
+                            myScore++;
+                            scores.put(gi, myScore);
+                        } else if(originalState == 1 && groceryItem.state == 2) { //If you uncheck
+                            myScore = (Long) scores.get(originalUid);
+                            myScore--;
+                            scores.put(originalUid, myScore);
+                        }
+                        mGameReference.setValue(scores);
+
+                        final Map<String, Object> scoresFinal = scores;
+                        //Get Score
+                        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                long count = 0;
+                                for(Object x : scoresFinal.values()) {
+                                    count += (long) x;
+                                }
+                                long childrenCount = dataSnapshot.getChildrenCount();
+                                if(childrenCount == count) {
+                                    FirebaseDatabase.getInstance().getReference()
+                                            .child("games").child(mDatabaseReference.getKey()).child("active").setValue(false);
+                                    Log.i("STATE","EQUA: "+ childrenCount);
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+
+
+                    } else {
+                        Map<String, Integer> newScores = new HashMap<String, Integer>();
+
+                        if(originalState == 0 && groceryItem.state == 1) {
+                            newScores.put(groceryItem.checkedUid, 1);
+                        } else if(originalState == 1 && groceryItem.state == 2) { //If you uncheck
+                            newScores.put(originalUid, 0);
+                        }
+                        mGameReference.setValue(newScores);
+                    }
+
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+
 
         private void userUpdatedItem(GroceryListAdapter groceryListAdapter) {
             // when updating an item text, we switch back the visibilities
@@ -506,6 +599,10 @@ public class GroceryListActivity extends BaseActivity {
                 //Get database references
                 DatabaseReference sharedLists = FirebaseDatabase.getInstance().getReference("shared");
                 DatabaseReference ownedLists = FirebaseDatabase.getInstance().getReference("owned");
+                DatabaseReference todoItems = FirebaseDatabase.getInstance().getReference("todo-items");
+
+                //delete todoItems
+                todoItems.child(mTodoKey).removeValue();
 
                 //Delete access for the shared keys
                 for (String userKey : updatedList.access.keySet()) {

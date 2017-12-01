@@ -20,6 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import divideandconquer.zippy.models.Game;
@@ -76,10 +79,11 @@ public class GameModeActivity extends BaseActivity {
         super.onStart();
 
         ValueEventListener gameModeListener = new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final Game game = dataSnapshot.getValue(Game.class);
-                if(game == null) {
+                if(game == null || game.startTime == 0) {
                     mStartButton.setText("START");
                 } else {
 
@@ -100,7 +104,39 @@ public class GameModeActivity extends BaseActivity {
                             System.err.println("Listener was cancelled");
                         }
                     });
+
+                    final Map<String, Integer> scores = game.scores;
+
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("todo-items").child(listKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            long count = 0;
+                            for(Integer x : scores.values()) {
+                                count += (long) x;
+                            }
+                            long childrenCount = dataSnapshot.getChildrenCount();
+                            if(childrenCount == count) {
+                                FirebaseDatabase.getInstance().getReference()
+                                        .child("games").child(mGameDatabaseReference.getKey()).child("active").setValue(false);
+                                Log.i("STATE","EQUA: "+ childrenCount);
+
+
+
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
+
+
 
 
             }
