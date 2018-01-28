@@ -30,7 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import divideandconquer.zippy.Fragments.MyShoppingListFragment;
 import divideandconquer.zippy.Fragments.ShareShoppingListFragment;
-import divideandconquer.zippy.R;
 
 public class MainActivity extends BaseActivity {
 
