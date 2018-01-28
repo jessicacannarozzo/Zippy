@@ -1,4 +1,4 @@
-package divideandconquer.zippy;
+package divideandconquer.zippy.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import divideandconquer.zippy.R;
 import divideandconquer.zippy.models.User;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener {

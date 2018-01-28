@@ -1,4 +1,4 @@
-package divideandconquer.zippy;
+package divideandconquer.zippy.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,14 +10,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,11 +30,12 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 
-import java.util.List;
-
-import divideandconquer.zippy.models.ListItem;
+import divideandconquer.zippy.Adapters.GroceryListAdapter;
+import divideandconquer.zippy.R;
 import divideandconquer.zippy.models.GroceryItem;
+import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.User;
+import divideandconquer.zippy.models.UserProfileColorService;
 
 /**
  * Created by geoff on 2017-10-13.
@@ -52,7 +51,7 @@ public class GroceryListActivity extends BaseActivity {
     private DatabaseReference mGroceryListReference;
     private DatabaseReference mGroceryItemReference;
     private ValueEventListener mTodoListener;
-    private GroceryListAdapter mAdapter;
+    private divideandconquer.zippy.Adapters.GroceryListAdapter mAdapter;
 
     //Do not use this field for data that must be accurate
     private ListItem listItem;
@@ -138,7 +137,7 @@ public class GroceryListActivity extends BaseActivity {
         mTodoListener = todoListener;
 
         // Listen for new todo list items
-        mAdapter = new GroceryListAdapter(this, mGroceryItemReference);
+        mAdapter = new divideandconquer.zippy.Adapters.GroceryListAdapter(this, mGroceryItemReference);
         mTodoRecycler.setAdapter(mAdapter);
     }
 
@@ -465,7 +464,7 @@ public class GroceryListActivity extends BaseActivity {
         int i = item.getItemId();
         if (i == R.id.share_list) {
 
-            Intent intent = new Intent(this, ShareListActivity.class);
+            Intent intent = new Intent(this, divideandconquer.zippy.Activities.ShareListActivity.class);
             intent.putExtra(GroceryListActivity.EXTRA_POST_KEY, getIntent().getStringExtra(EXTRA_POST_KEY));
             startActivity(intent);
 

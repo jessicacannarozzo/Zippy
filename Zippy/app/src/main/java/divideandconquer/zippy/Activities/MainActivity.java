@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package divideandconquer.zippy;
+package divideandconquer.zippy.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,8 +28,9 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import divideandconquer.zippy.fragment.MyShoppingListFragment;
-import divideandconquer.zippy.fragment.ShareShoppingListFragment;
+import divideandconquer.zippy.Fragments.MyShoppingListFragment;
+import divideandconquer.zippy.Fragments.ShareShoppingListFragment;
+import divideandconquer.zippy.R;
 
 public class MainActivity extends BaseActivity {
 
