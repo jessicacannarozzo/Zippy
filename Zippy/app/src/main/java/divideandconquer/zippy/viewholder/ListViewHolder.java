@@ -11,7 +11,6 @@ import android.widget.TextView;
 import divideandconquer.zippy.R;
 
 
-import divideandconquer.zippy.fragment.ShoppingListFragment;
 import divideandconquer.zippy.models.ListItem;
 
 public class ListViewHolder extends RecyclerView.ViewHolder {

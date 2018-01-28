@@ -1,4 +1,4 @@
-package divideandconquer.zippy.fragment;
+package divideandconquer.zippy.Fragments;
 
 import android.util.Log;
 import android.widget.Toast;
@@ -8,9 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
-import divideandconquer.zippy.models.GroceryItem;
 import divideandconquer.zippy.models.ListItem;
 
 /**

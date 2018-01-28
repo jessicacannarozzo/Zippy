@@ -1,6 +1,5 @@
-package divideandconquer.zippy.fragment;
+package divideandconquer.zippy.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
@@ -22,9 +20,9 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-import divideandconquer.zippy.GroceryListActivity;
+import divideandconquer.zippy.Activities.GroceryListActivity;
 import divideandconquer.zippy.R;
-import divideandconquer.zippy.UserProfileColorService;
+import divideandconquer.zippy.models.UserProfileColorService;
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.viewholder.ListViewHolder;
 

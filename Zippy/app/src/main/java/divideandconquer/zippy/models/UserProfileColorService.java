@@ -1,4 +1,4 @@
-package divideandconquer.zippy;
+package divideandconquer.zippy.models;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 

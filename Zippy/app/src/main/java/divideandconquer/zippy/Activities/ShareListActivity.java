@@ -1,20 +1,14 @@
-package divideandconquer.zippy;
+package divideandconquer.zippy.Activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.ProviderQueryResult;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,11 +17,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import divideandconquer.zippy.R;
 import divideandconquer.zippy.models.ListItem;
 import divideandconquer.zippy.models.User;
 

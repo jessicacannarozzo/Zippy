@@ -1,4 +1,4 @@
-package divideandconquer.zippy;
+package divideandconquer.zippy.Activities;
 
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
